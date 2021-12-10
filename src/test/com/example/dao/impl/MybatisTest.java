@@ -1,9 +1,7 @@
 package com.example.dao.impl;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.example.entities.PO.Menu;
 import com.example.entities.PO.Role;
-import com.example.mapper.CommonMapper;
 import com.example.mapper.TransactionMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.Environment;
@@ -16,7 +14,6 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 /**

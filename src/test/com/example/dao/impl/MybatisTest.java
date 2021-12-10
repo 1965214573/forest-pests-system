@@ -2,7 +2,9 @@ package com.example.dao.impl;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.example.entities.PO.Menu;
+import com.example.entities.PO.Role;
 import com.example.mapper.CommonMapper;
+import com.example.mapper.TransactionMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -59,11 +61,17 @@ public class MybatisTest {
         assert sqlSessionFactory != null;
         try (SqlSession session = sqlSessionFactory.openSession()) {
 
-            CommonMapper mapper = session.getMapper(CommonMapper.class);
+            /*CommonMapper mapper = session.getMapper(CommonMapper.class);
             List<Menu> rootMenuList = mapper.getRootMenuList(1);
             for (Menu menu : rootMenuList) {
                 System.out.println(menu);
-            }
+            }*/
+
+            // 测试事务管理
+            Role role = new Role();
+            role.setRoleName("test");
+            session.getMapper(TransactionMapper.class).insert(role);
+
         }
     }
 }

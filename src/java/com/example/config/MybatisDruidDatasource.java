@@ -7,6 +7,8 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
+ * 用于Mybatis使用druid连接池，只需要实现DataSourceFactory接口
+ * 要求properties参数列表要与指定的第三方连接池参数一致
  * @author youngoo
  * @date 2021/12/10 19:27
  */

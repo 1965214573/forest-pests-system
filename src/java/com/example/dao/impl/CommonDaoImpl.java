@@ -2,8 +2,6 @@ package com.example.dao.impl;
 
 import com.example.dao.CommonDao;
 import com.example.entities.PO.Menu;
-import com.example.jdbc.QueryRunner;
-import com.example.jdbc.handler.BeanListHandler;
 
 import java.util.List;
 
@@ -13,7 +11,7 @@ import java.util.List;
  */
 public class CommonDaoImpl implements CommonDao {
 
-    QueryRunner queryRunner = new QueryRunner();
+    // QueryRunner queryRunner = new QueryRunner();
 
     /**
      * 根据角色id查询所有根菜单
@@ -24,7 +22,7 @@ public class CommonDaoImpl implements CommonDao {
     @Override
     public List<Menu> getRootMenuList(Integer roleId) {
         String sql = "select menus.* from role_menu inner join menus on role_menu.menuId = menus.menuId where role_menu.roleId = ? and menus.pId = 0";
-        return queryRunner.query(sql, new BeanListHandler<>(Menu.class), roleId);
+        return null; //queryRunner.query(sql, new BeanListHandler<>(Menu.class), roleId);
     }
 
     /**
@@ -36,6 +34,6 @@ public class CommonDaoImpl implements CommonDao {
     @Override
     public List<Menu> getMenuListBypId(Integer pId) {
         String sql = "SELECT * FROM menus WHERE pId = ?";
-        return queryRunner.query(sql, new BeanListHandler<>(Menu.class), pId);
+        return null; // queryRunner.query(sql, new BeanListHandler<>(Menu.class), pId);
     }
 }

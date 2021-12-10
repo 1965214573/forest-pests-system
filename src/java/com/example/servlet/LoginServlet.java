@@ -4,7 +4,6 @@ import com.example.entities.VO.MenuVO;
 import com.example.service.CommonService;
 import com.example.service.impl.CommonServiceImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,7 @@ import java.util.List;
 @WebServlet(name = "LoginServlet", value = "/login.do")
 public class LoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("登录成功");
         CommonService commonService = new CommonServiceImpl();
         List<MenuVO> menuVOList = commonService.showMenuList(1);
@@ -29,7 +28,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         doGet(request, response);
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.UserMapper">
+    <select id="queryByNameAndPwd" resultType="com.example.entities.VO.UserVO">
+        SELECT
+            users.userId,
+            users.userName,
+            users.userPwd,
+            roles.roleName AS `level`,
+            users.realName
+        FROM
+            users
+                INNER JOIN
+            user_role
+            ON
+                users.userId = user_role.userId
+                INNER JOIN
+            roles
+            ON
+                user_role.roleId = roles.roleId
+        WHERE
+            users.userName = #{userName} AND
+            users.userPwd = #{userPwd}
+    </select>
+</mapper>

@@ -1,13 +1,17 @@
 package com.example.service.impl;
 
 import com.example.entities.PO.Menu;
+import com.example.entities.PO.User;
 import com.example.entities.VO.MenuVO;
 import com.example.mapper.CommonMapper;
+import com.example.mapper.UserMapper;
 import com.example.service.CommonService;
 import com.example.utils.MybatisUtil;
+import com.example.utils.ResultInfo;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,7 +27,7 @@ public class CommonServiceImpl implements CommonService {
      * @return 直接返回一个具有树状结构的数组
      */
     @Override
-    public List<MenuVO> showMenuList(Integer roleId) {
+    public ResultInfo showMenuList(Integer roleId) {
 
         try (SqlSession session = MybatisUtil.getSession()) {
             CommonMapper commonMapper = session.getMapper(CommonMapper.class);
@@ -64,7 +68,22 @@ public class CommonServiceImpl implements CommonService {
                                 .build()
                 );
             }
-            return menuVOList;
+            HashMap<String, Object> menuResult = new HashMap<>();
+            menuResult.put("menuList", menuVOList);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("导航菜单")
+                    .data(menuResult)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResultInfo showMenuList(User user) {
+        try(SqlSession session = MybatisUtil.getSession()) {
+            // TODO 查询用户角色id
+            // 当前默认为1
+            return showMenuList(1);
         }
     }
 }

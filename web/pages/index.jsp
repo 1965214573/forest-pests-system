@@ -163,8 +163,10 @@
     layui.config({
         base: '../layuiadmin/' //静态资源所在路径
     }).extend({
-        index: 'lib/index' //主入口模块
+        index: 'lib/index', //主入口模块
+        request: 'api/request'
     }).use('index');
+
 </script>
 </body>
 </html>

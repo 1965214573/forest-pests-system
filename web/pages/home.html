@@ -7,4 +7,18 @@
 <body>
 轮播图主页
 </body>
+<script src="../layuiadmin/layui/layui.js"></script>
+<script>
+
+    layui.config({
+        base: '../layuiadmin/modules/' //静态资源所在路径
+    }).extend({
+        request: 'api/request'
+    }).use('request', function () {
+        let request = layui.request
+        alert("ok")
+        request.login({"sdfs":'sdfs'})
+    })
+
+</script>
 </html>

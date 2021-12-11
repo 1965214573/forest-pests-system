@@ -1,15 +1,18 @@
 package com.example.servlet;
 
-import com.example.entities.VO.MenuVO;
-import com.example.service.CommonService;
-import com.example.service.impl.CommonServiceImpl;
+import com.alibaba.fastjson.JSON;
+import com.example.entities.PO.User;
+import com.example.entities.VO.UserVO;
+import com.example.service.UserService;
+import com.example.service.impl.UserServiceImpl;
+import com.example.utils.ResultInfo;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Calendar;
 
 /**
  * @author youngoo
@@ -18,13 +21,25 @@ import java.util.List;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("登录成功");
-        CommonService commonService = new CommonServiceImpl();
-        List<MenuVO> menuVOList = commonService.showMenuList(1);
-        menuVOList.forEach(System.out::println);
-        request.getSession().setAttribute("msg", "登录成功");
-        request.getSession().setAttribute("menuVOList", menuVOList);
-        response.sendRedirect("index.jsp");
+        // 数据验证
+
+        String code = Calendar.getInstance().toString();
+        code = (String) request.getSession().getAttribute("code");
+        System.out.println(code);
+        if (!code.equalsIgnoreCase(request.getParameter("vercode"))) {
+            System.out.println(ResultInfo.err());
+            response.getWriter().write(JSON.toJSONString(ResultInfo.builder()
+                    .code(400)
+                    .msg("验证码有误")
+                    .build()));
+        } else {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            User user = User.builder().userName(username).userPwd(password).build();
+            UserService userService = new UserServiceImpl();
+            ResultInfo resultInfo= userService.unSafeLogin(user);
+            response.getWriter().write(JSON.toJSONString(resultInfo));
+        }
     }
 
     @Override

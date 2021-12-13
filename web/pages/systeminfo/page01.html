@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>用户管理</title>
+  <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+  <style>
+    .box {
+      margin-top: 20px;
+      margin-left: 10px;
+      background-color: white;
+      padding-top: 40px;
+    }
+  </style>
+</head>
+<body>
+<div class="box layui-row" >
+  <form class="layui-form layui-input-inline">
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="role">角色：</label>
+      <div class="layui-input-inline">
+
+        <div id="view"></div>
+      </div>
+      <div class="layui-input-inline">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="queryCondition">查询</button>
+      </div>
+    </div>
+  </form>
+  <div class="layui-form-item layui-input-inline">
+    <button class="layui-btn layui-btn-normal" id="add">添加管理员</button>
+  </div>
+  <div class="layui-card">
+    <table class="box" id="pest-table" lay-filter="tables"></table>
+  </div>
+</div>
+
+
+</body>
+
+<!--工具条-->
+<script type="text/html" id="toolbar">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script id="role-select" type="text/html">
+  <select name="role" id="role">
+    {{# layui.each(d.roleList, function(index, item) { }}
+      <option value="{{ item.roleId}}">{{ item.roleName}}</option>
+    {{# }) }}
+  </select>
+</script>
+
+<script id="user-info-panel" type="text/html">
+  <form action="" class="layui-form">
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="userName">用户名:</label>
+      <div class="layui-input-block">
+        <input type="text" name="userName" id="userName" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="userPwd">密码:</label>
+      <div class="layui-input-block">
+        <input type="password" name="userPwd" id="userPwd" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="rePwd">确认密码:</label>
+      <div class="layui-input-block">
+        <input type="password" name="rePwd" id="rePwd" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="realName">真实姓名:</label>
+      <div class="layui-input-block">
+        <input type="text" name="realName" id="realName" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label" for="userName">用户角色:</label>
+      <div class="layui-input-block">
+        <div id="roleList"></div>
+      </div>
+    </div>
+  </form>
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+  layui.use(['table', 'form', 'layer', 'laytpl', 'element'], function () {
+    let form = layui.form
+    let layer = layui.layer
+    let table = layui.table
+    let laytpl = layui.laytpl;
+    let element = layui.element
+    let $ = layui.$
+    let roleData
+
+    // 加载下拉列表数据
+    $.ajax({
+      url: '/roleList.do',
+      type: 'get',
+      dataType: 'json',
+      success: function (res) {
+        roleData = res.data
+        laytpl($('#role-select').html()).render(roleData, function (html) {
+          $('#view').html(html)
+          form.render('select')
+        })
+      }
+    })
+
+    // 表格数据渲染
+    table.render({
+      elem: '#pest-table'
+      ,url: '/userList.do'//数据接口
+      ,cols: [[ //表头
+        {field: 'userId', title: 'id', hide: true}
+        ,{field: 'num', title: '序号', type: 'numbers'}
+        ,{field: 'userName', title: '用户名', align: 'center', width:200}
+        ,{field: 'userPwd', title: '密码', align: 'center',}
+        ,{field: 'level', title: '角色', align: 'center',}
+        ,{field: 'realName', title: '真实姓名', align: 'center',}
+        ,{title: '操作', align: 'center', width: 180, templet: '#toolbar'}
+      ]]
+      ,limit: 5
+      ,limits: [5, 10, 20]
+      ,page: true //开启分页
+      ,response: {
+        statusCode: 200
+      }
+      ,parseData: function (res) {
+        return {
+          "code": res.code,
+          "data": res.data.userList,
+          "count": res.data.count,
+          "msg": res.msg
+        }
+      }
+    });
+
+    // 表格事件监听
+    table.on('tool(tables)', function (obj) {
+      alert(JSON.stringify(obj.data))
+    })
+
+    //监听提交
+    form.on('submit(queryCondition)', function(data){
+      layer.msg(JSON.stringify(data.field));
+      return false;
+    });
+
+    $('#add').click(function () {
+      // 打开一个新增页面
+      layer.open({
+        title: '添加管理员',
+        type: 1,
+        area: ['500px', '500px'],
+        offset: '10px',
+        content: $('#user-info-panel').html(),
+        success: function (layero, index) {
+          laytpl($('#role-select').html()).render(roleData, function (html) {
+            $(layero).find('#roleList').html(html)
+            form.render('select')
+          })
+        },
+        btn: ['提交','取消'],
+        yes: function (index, layero) {
+          // 输出内容
+          console.log($(layero).find('form').serialize())
+          $.ajax({
+            type: 'post',
+            url: '/test.do',
+            data: $(layero).find('form').serialize(),
+            dataType: 'json',
+            success: function (res) {
+              console.log(res);
+            }
+          })
+
+        },
+        btn2: function (index, layero) {
+          // 取消，销毁窗口
+        }
+      })
+    })
+
+  })
+</script>
+</html>

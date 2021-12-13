@@ -22,4 +22,37 @@
             users.userName = #{userName} AND
             users.userPwd = #{userPwd}
     </select>
+    <select id="countUser" resultType="java.lang.Integer">
+        select count(*) from users
+    </select>
+
+    <resultMap id="UserVOMap" type="com.example.entities.VO.UserVO">
+        <id property="userId" column="userId"/>
+        <result property="userName" column="userName"/>
+        <result property="userPwd" column="userPwd"/>
+        <result property="level" column="roleName"/>
+        <result property="realName" column="realName"/>
+    </resultMap>
+
+    <select id="queryAll" resultMap="UserVOMap">
+        SELECT
+            users.userId,
+            users.userName,
+            users.userPwd,
+            roles.roleName,
+            users.realName
+        FROM
+            users
+                INNER JOIN
+            user_role
+            ON
+                users.userId = user_role.userId
+                INNER JOIN
+            roles
+            ON
+                user_role.roleId = roles.roleId
+        WHERE
+            users.isDeleted = 0
+        limit #{index},#{size}
+    </select>
 </mapper>

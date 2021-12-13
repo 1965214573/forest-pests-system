@@ -15,4 +15,18 @@ public interface UserService {
      * @return 登录结果信息
      */
     public ResultInfo unSafeLogin(User user);
+
+    /**
+     * 查询所有角色信息
+     * @return 查询到的结果信息
+     */
+    ResultInfo getRoleList();
+
+    /**
+     * 查询所有的用户列表
+     * @param page 当前页
+     * @param limit 分页大小
+     * @return 结果信息
+     */
+    ResultInfo getUserList(String page, String limit);
 }

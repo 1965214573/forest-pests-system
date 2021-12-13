@@ -177,7 +177,7 @@
         $('#username').text(userInfo.realName)
         $.ajax({
             url: '/menu.do',
-            method: 'get',
+            type: 'get',
             data: {
                 userId: userInfo.userId
             },

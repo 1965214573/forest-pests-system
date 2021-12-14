@@ -8,7 +8,7 @@
     <properties resource="config/druid-config.properties"/>
     <!--设置部分选项-->
     <settings>
-        <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <setting name="logImpl" value="LOG4J"/>
     </settings>
     <environments default="development">
         <!--配置mybatis运行环境-->
@@ -29,6 +29,10 @@
     </environments>
     <!--配置mapper映射文件地址-->
     <mappers>
-        <package name="com.example.mapper"/>
+        <mapper resource="mapper/CommonMapper.xml"/>
+        <mapper resource="mapper/PestMapper.xml"/>
+        <mapper resource="mapper/RoleMapper.xml"/>
+        <mapper resource="mapper/TransactionMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
     </mappers>
 </configuration>

@@ -11,8 +11,12 @@
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/standard.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/junit-4.13.1.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/lombok-1.18.22.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/jdbc-utils-1.2.0.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/javax.servlet-api-3.1.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/druid-1.2.8.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/log4j-1.2.12.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mybatis-3.5.7.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/fastjson-1.2.76.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-8.0.26.jar" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="forest-pests-system/web/Web" />

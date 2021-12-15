@@ -1,6 +1,8 @@
 package com.example.mapper;
 
 import com.example.entities.PO.Menu;
+import com.example.entities.PO.User;
+import com.example.entities.VO.MenuVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -24,4 +26,11 @@ public interface CommonMapper {
      * @return 查询到的结果
      */
     List<Menu> getMenuListBypId(Integer pId);
+
+    /**
+     * 根据用户信息查询菜单列表
+     * @param user 用户对象
+     * @return 返回结果对象
+     */
+    List<MenuVO> getMenuList(User user);
 }

@@ -81,9 +81,15 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public ResultInfo showMenuList(User user) {
         try(SqlSession session = MybatisUtil.getSession()) {
-            // TODO 查询用户角色id
-            // 当前默认为1
-            return showMenuList(1);
+            CommonMapper mapper = session.getMapper(CommonMapper.class);
+            List<MenuVO> menuVOList = mapper.getMenuList(user);
+            HashMap<String, Object> menuResult = new HashMap<>(1);
+            menuResult.put("menuList", menuVOList);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("导航菜单")
+                    .data(menuResult)
+                    .build();
         }
     }
 }

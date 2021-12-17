@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.TestDemoMapper">
+
+
+    <select id="testIf" resultType="com.example.entities.PO.Menu">
+        select * from menus
+        <where>
+            <choose>
+                <when test="menuName == '首页'">menuName = 1</when>
+            </choose>
+        </where>
+    </select>
+</mapper>

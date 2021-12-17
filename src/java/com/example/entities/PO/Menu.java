@@ -1,12 +1,17 @@
 package com.example.entities.PO;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author youngoo
  * @date 2021/12/9 19:10
  */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Menu {
     private Integer menuId;
     private String menuName;

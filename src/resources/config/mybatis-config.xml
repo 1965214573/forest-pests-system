@@ -29,10 +29,6 @@
     </environments>
     <!--配置mapper映射文件地址-->
     <mappers>
-        <mapper resource="mapper/CommonMapper.xml"/>
-        <mapper resource="mapper/PestMapper.xml"/>
-        <mapper resource="mapper/RoleMapper.xml"/>
-        <mapper resource="mapper/TransactionMapper.xml"/>
-        <mapper resource="mapper/UserMapper.xml"/>
+        <package name="com.example.mapper"/>
     </mappers>
 </configuration>

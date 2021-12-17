@@ -53,40 +53,6 @@
   </select>
 </script>
 
-<script id="user-info-panel" type="text/html">
-  <form action="" class="layui-form">
-    <div class="layui-form-item">
-      <label class="layui-form-label" for="userName">用户名:</label>
-      <div class="layui-input-block">
-        <input type="text" name="userName" id="userName" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label" for="userPwd">密码:</label>
-      <div class="layui-input-block">
-        <input type="password" name="userPwd" id="userPwd" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label" for="rePwd">确认密码:</label>
-      <div class="layui-input-block">
-        <input type="password" name="rePwd" id="rePwd" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label" for="realName">真实姓名:</label>
-      <div class="layui-input-block">
-        <input type="text" name="realName" id="realName" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label" for="userName">用户角色:</label>
-      <div class="layui-input-block">
-        <div id="roleList"></div>
-      </div>
-    </div>
-  </form>
-</script>
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
   layui.use(['table', 'form', 'layer', 'laytpl', 'element'], function () {
@@ -143,47 +109,46 @@
 
     // 表格事件监听
     table.on('tool(tables)', function (obj) {
-      alert(JSON.stringify(obj.data))
+      let data = obj.data
+      let layEvent = obj.event
+      let tr = obj.tr
+
+      if (layEvent === 'edit') {
+        layer.msg("编辑数据")
+      }else if (layEvent === 'detail') {
+        layer.msg(JSON.stringify(data))
+      } else if (layEvent === 'del') {
+        layer.msg("删除数据")
+      }
+
     })
 
-    //监听提交
+    //监听条件查询提交提交
     form.on('submit(queryCondition)', function(data){
-      layer.msg(JSON.stringify(data.field));
+      layer.msg(JSON.stringify(data.field))
+      $.ajax({
+        url: '/userList.do',
+        data: data.field,
+        type: 'get',
+        dataType: 'json',
+        success: function (res) {
+          // 获取数据，进行表格重新渲染
+
+        }
+      })
       return false;
     });
+
+
 
     $('#add').click(function () {
       // 打开一个新增页面
       layer.open({
         title: '添加管理员',
-        type: 1,
+        type: 2,
         area: ['500px', '500px'],
         offset: '10px',
-        content: $('#user-info-panel').html(),
-        success: function (layero, index) {
-          laytpl($('#role-select').html()).render(roleData, function (html) {
-            $(layero).find('#roleList').html(html)
-            form.render('select')
-          })
-        },
-        btn: ['提交','取消'],
-        yes: function (index, layero) {
-          // 输出内容
-          console.log($(layero).find('form').serialize())
-          $.ajax({
-            type: 'post',
-            url: '/test.do',
-            data: $(layero).find('form').serialize(),
-            dataType: 'json',
-            success: function (res) {
-              console.log(res);
-            }
-          })
-
-        },
-        btn2: function (index, layero) {
-          // 取消，销毁窗口
-        }
+        content: 'childPage/addUser.html'
       })
     })
 

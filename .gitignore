@@ -1,3 +1,4 @@
 # Project exclude paths
 /out/
 /src/main/webapp/WEB-INF/classes/
+/target/

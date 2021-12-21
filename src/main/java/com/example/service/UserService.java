@@ -29,4 +29,12 @@ public interface UserService {
      * @return 结果信息
      */
     ResultInfo getUserList(String page, String limit);
+
+    /**
+     * 添加用户的方法，根据用户信息和角色id，分别进行插入操作
+     * @param userInfo 用户信息
+     * @param roleId 角色id
+     * @return 统一返回格式
+     */
+    ResultInfo addUser(User userInfo, int roleId);
 }

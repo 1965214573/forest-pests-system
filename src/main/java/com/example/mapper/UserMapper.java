@@ -32,4 +32,11 @@ public interface UserMapper {
      * @return 查询到的所有用户数据
      */
     List<UserVO> queryAll(@Param("index") int index, @Param("size") int size);
+
+    /**
+     * 向用户表插入一条新的信息
+     * @param userInfo 用户信息对象
+     * @return 插入的id
+     */
+    int insertUser(User userInfo);
 }

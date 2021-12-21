@@ -98,4 +98,27 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
     }
+
+    /**
+     * 添加用户的方法，根据用户信息和角色id，分别进行插入操作
+     *
+     * @param userInfo 用户信息
+     * @param roleId     角色id
+     * @return 统一返回格式
+     */
+    @Override
+    public ResultInfo addUser(User userInfo, int roleId) {
+        try(SqlSession session = MybatisUtil.getSession()) {
+            // 添加用户
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            int resultRow = userMapper.insertUser(userInfo);
+            RoleMapper roleMapper = session.getMapper(RoleMapper.class);
+            resultRow = roleMapper.insertUser(userInfo.getUserId(), roleId);
+            session.commit();
+            return ResultInfo.ok();
+        } catch (Exception e) {
+            return ResultInfo.err();
+        }
+
+    }
 }

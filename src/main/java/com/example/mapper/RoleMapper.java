@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entities.PO.Role;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,4 +14,12 @@ public interface RoleMapper {
      * @return 返回查询到的结果
      */
     List<Role> selectAll();
+
+    /**
+     * 添加用户角色对应信息
+     * @param userId 用户id
+     * @param roleId 角色id
+     * @return 受影响的行数
+     */
+    int insertUser(@Param("userId") int userId, @Param("roleId") int roleId);
 }

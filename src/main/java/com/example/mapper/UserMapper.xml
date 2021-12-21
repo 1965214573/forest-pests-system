@@ -3,27 +3,27 @@
 <mapper namespace="com.example.mapper.UserMapper">
     <select id="queryByNameAndPwd" resultType="com.example.entities.VO.UserVO">
         SELECT
-            users.userId,
-            users.userName,
-            users.userPwd,
-            roles.roleName AS `level`,
-            users.realName
+            system_user.userId,
+            system_user.userName,
+            system_user.userPwd,
+            system_role.roleName AS `level`,
+            system_user.realName
         FROM
-            users
+            system_user
                 INNER JOIN
-            user_role
+            system_user_role
             ON
-                users.userId = user_role.userId
+                system_user.userId = system_user_role.userId
                 INNER JOIN
-            roles
+            system_role
             ON
-                user_role.roleId = roles.roleId
+                system_user_role.roleId = system_role.roleId
         WHERE
-            users.userName = #{userName} AND
-            users.userPwd = #{userPwd}
+            system_user.userName = #{userName} AND
+            system_user.userPwd = #{userPwd}
     </select>
     <select id="countUser" resultType="java.lang.Integer">
-        select count(*) from users
+        select count(*) from system_user
     </select>
 
     <resultMap id="UserVOMap" type="com.example.entities.VO.UserVO">
@@ -36,23 +36,23 @@
 
     <select id="queryAll" resultMap="UserVOMap">
         SELECT
-            users.userId,
-            users.userName,
-            users.userPwd,
-            roles.roleName,
-            users.realName
+            system_user.userId,
+            system_user.userName,
+            system_user.userPwd,
+            system_role.roleName,
+            system_user.realName
         FROM
-            users
+            system_user
                 INNER JOIN
-            user_role
+            system_user_role
             ON
-                users.userId = user_role.userId
+                system_user.userId = system_user_role.userId
                 INNER JOIN
-            roles
+            system_role
             ON
-                user_role.roleId = roles.roleId
+                system_user_role.roleId = system_role.roleId
         WHERE
-            users.isDeleted = 0
+            system_user.isDeleted = 0
         limit #{index},#{size}
     </select>
 </mapper>

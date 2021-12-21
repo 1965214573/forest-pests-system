@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.CommonMapper">
     <select id="getRootMenuList" resultType="com.example.entities.PO.Menu">
-        select menus.* from role_menu inner join menus on role_menu.menuId = menus.menuId where role_menu.roleId = #{roleId} and menus.pId = 0
+        select system_menu.* from system_role_menu inner join system_menu on system_role_menu.menuId = system_menu.menuId where system_role_menu.roleId = #{roleId} and system_menu.pId = 0
     </select>
     <select id="getMenuListBypId" resultType="com.example.entities.PO.Menu">
-        SELECT * FROM menus WHERE pId = #{pId}
+        SELECT * FROM system_menu WHERE pId = #{pId}
     </select>
 
     <resultMap id="MenuVo" type="com.example.entities.VO.MenuVO">
@@ -33,22 +33,22 @@
             c.menuUrl,
             c.icon
         FROM
-            user_role
+            system_user_role
                 INNER JOIN
-            role_menu
+            system_role_menu
             ON
-                user_role.roleId = role_menu.roleId
+                system_user_role.roleId = system_role_menu.roleId
                 INNER JOIN
-            menus AS f
+            system_menu AS f
             ON
-                role_menu.menuId = f.menuId
+                system_role_menu.menuId = f.menuId
                 LEFT JOIN
-            menus AS c
+            system_menu AS c
             ON
                 f.menuId = c.pId
         WHERE
             f.pId = 0 AND
-            user_role.userId = #{userId}
+            system_user_role.userId = #{userId}
         ORDER BY
             c.menuId
     </select>

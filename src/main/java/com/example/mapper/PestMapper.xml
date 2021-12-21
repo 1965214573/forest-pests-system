@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.mapper.PestMapper">
     <select id="countPest" resultType="java.lang.Integer">
-        select count(*) from pest
+        select count(*) from detail_pest
     </select>
     <select id="selectPest" resultType="com.example.entities.PO.Pest">
-        select * from pest limit #{page}, ${size}
+        select * from detail_pest limit #{page}, ${size}
     </select>
 
 </mapper>

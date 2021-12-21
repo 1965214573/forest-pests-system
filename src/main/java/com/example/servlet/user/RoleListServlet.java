@@ -1,4 +1,4 @@
-package com.example.servlet;
+package com.example.servlet.user;
 
 import com.alibaba.fastjson.JSON;
 import com.example.service.UserService;
@@ -13,15 +13,12 @@ import java.io.IOException;
 /**
  * @author youngoo
  */
-@WebServlet(name = "UserListServlet", value = "/userList.do")
-public class UserListServlet extends HttpServlet {
+@WebServlet(name = "RoleListServlet", value = "/roleList.do")
+public class RoleListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String page = request.getParameter("page");
-        String limit = request.getParameter("limit");
-
         UserService userService = new UserServiceImpl();
-        ResultInfo resultInfo = userService.getUserList(page, limit);
+        ResultInfo resultInfo = userService.getRoleList();
         response.getWriter().write(JSON.toJSONString(resultInfo));
     }
 

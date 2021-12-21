@@ -1,4 +1,4 @@
-package com.example.servlet;
+package com.example.servlet.user;
 
 import com.alibaba.fastjson.JSON;
 import com.example.entities.PO.User;

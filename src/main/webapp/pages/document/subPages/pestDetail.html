@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虫害子页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        pest: 'pest'
+    }).use(['pest', 'setting'], function () {
+        let pest = layui.pest
+        let setting = layui.setting
+        pest.addPest({a: 1}, function (res) {
+            
+        })
+    })
+</script>
+</html>

@@ -23,10 +23,10 @@ public class BaseServlet extends HttpServlet {
         Logger logger = Logger.getLogger(this.getClass());
         String uri = req.getRequestURI();
         String methodName = uri.lastIndexOf('?') != -1 ? uri.substring(uri.lastIndexOf('/') + 1, uri.lastIndexOf('?')) : uri.substring(uri.lastIndexOf('/') + 1);
-        System.out.println(methodName);
         try {
             Method method = this.getClass().getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
-            method.invoke(this, req, resp);
+            ResultInfo invoke = (ResultInfo)method.invoke(this, req, resp);
+            resp.getWriter().write(JSON.toJSONString(invoke));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             logger.debug(e.getMessage());
             resp.getWriter().write(JSON.toJSONString(ResultInfo.err()));

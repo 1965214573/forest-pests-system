@@ -139,7 +139,7 @@
 
             {{# layui.each(d.menuList, function(index, item) { }}
                 <li data-name="{{ item.menuName}}" class="layui-nav-item">
-                    <a href="javascript:;" {{# if(item.childrenMenu == null) { }} lay-href="pages/{{ item.menuUrl}}.html" {{# } }} lay-tips="{{# item.menuName}}" lay-direction="2">
+                    <a href="javascript:;" {{# if(index == 0) {}} lay-href="pages/{{ item.menuUrl}}.html" {{# } }} lay-tips="{{# item.menuName}}" lay-direction="2">
                     <i class="layui-icon {{ item.icon}}"></i>
                     <cite>{{ item.menuName}}</cite>
                     </a>

@@ -92,7 +92,7 @@
     form.on('submit(LAY-user-login-submit)', function (data) {
 
       $.ajax({
-        url: '/login.do',
+        url: '/user.do/login',
         method: 'post',
         data: data.field,
         success: function (res) {

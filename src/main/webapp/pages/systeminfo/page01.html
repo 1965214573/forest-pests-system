@@ -66,7 +66,7 @@
 
     // 加载下拉列表数据
     $.ajax({
-      url: '/roleList.do',
+      url: '/user.do/roleList',
       type: 'get',
       dataType: 'json',
       success: function (res) {
@@ -81,7 +81,7 @@
     // 表格数据渲染
     table.render({
       elem: '#pest-table'
-      ,url: '/userList.do'//数据接口
+      ,url: '/user.do/userList'//数据接口
       ,cols: [[ //表头
         {field: 'userId', title: 'id', hide: true}
         ,{field: 'num', title: '序号', type: 'numbers'}
@@ -127,7 +127,7 @@
     form.on('submit(queryCondition)', function(data){
       layer.msg(JSON.stringify(data.field))
       $.ajax({
-        url: '/userList.do',
+        url: '/user.do/userList',
         data: data.field,
         type: 'get',
         dataType: 'json',

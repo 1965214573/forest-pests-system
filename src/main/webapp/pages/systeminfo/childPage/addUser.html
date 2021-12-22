@@ -67,7 +67,7 @@
     let roleData
 
     $.ajax({
-      url: '/roleList.do',
+      url: '/user.do/roleList',
       type: 'get',
       dataType: 'json',
       success: function (res) {
@@ -88,7 +88,7 @@
       delete data.field.rePwd
       // 表单提交
       $.ajax({
-        url: '/user/addUser.do',
+        url: '/user.do/addUser',
         type: 'post',
         dataType: 'json',
         data: data.field,

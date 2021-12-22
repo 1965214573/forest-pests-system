@@ -1,6 +1,4 @@
-layui.extend({
-    setting: '../config/global'
-}).define(['setting', 'jquery'], function(exports){
+layui.define(['jquery', 'setting'], function(exports){
     let setting = layui.setting
     let $ = layui.$
 

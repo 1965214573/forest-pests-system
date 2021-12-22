@@ -24,9 +24,7 @@ public class LoginServlet extends HttpServlet {
 
         String code = Calendar.getInstance().toString();
         code = (String) request.getSession().getAttribute("code");
-        System.out.println(code);
         if (!code.equalsIgnoreCase(request.getParameter("vercode"))) {
-            System.out.println(ResultInfo.err());
             response.getWriter().write(JSON.toJSONString(ResultInfo.builder()
                     .code(400)
                     .msg("验证码有误")

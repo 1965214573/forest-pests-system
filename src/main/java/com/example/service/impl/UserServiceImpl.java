@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         UserVO dataUser = userMapper.queryByNameAndPwd(user);
         if (dataUser != null) {
             // 登录成功
-            HashMap<String, Object> resultMap = new HashMap<>();
+            HashMap<String, Object> resultMap = new HashMap<>(1);
             resultMap.put("userInfo", dataUser);
             return ResultInfo.builder()
                     .code(200)
@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService {
      * 查询所有的用户列表
      *
      * @return 结果信息
-     * @param page
-     * @param limit
+     * @param page 页码
+     * @param limit 每页条数
      */
     @Override
     public ResultInfo getUserList(String page, String limit) {

@@ -26,12 +26,12 @@
                 <input type="text" name="host" id="host" autocomplete="off" placeholder="输入寄主" class="layui-input">
             </div>
             <div class="layui-input-inline">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="queryCondition">搜索</button>
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
             </div>
         </div>
     </form>
     <div class="layui-form-item layui-input-inline">
-        <button class="layui-btn layui-btn-normal" id="add">添加新虫害</button>
+        <button class="layui-btn" id="add">添加新虫害</button>
     </div>
     <div class="layui-card">
         <table class="box" id="pest-table" lay-filter="tables"></table>
@@ -56,9 +56,9 @@
         let element = layui.element
         let $ = layui.$
 
-        table.render({
+        let pestTable = table.render({
             elem: '#pest-table'
-            ,url: '/pestList.do'//数据接口
+            ,url: '/pest/getPestList'//数据接口
             ,cols: [[ //表头
                 {field: 'id', title: 'id', hide: true}
                 ,{field: 'pestName', title: '名称', align: 'center', width:200}
@@ -88,15 +88,21 @@
 
         //监听提交
         form.on('submit(queryCondition)', function(data){
-            layer.msg(JSON.stringify(data.field));
+            pestTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
             return false;
         });
 
         $('#add').click(function () {
             // 打开一个新增页面
             layer.open({
+                type: 2,
                 title: '添加虫害',
-                content: '添加页面'
+                content: './subPages/pestDetail.html'
             })
         })
 

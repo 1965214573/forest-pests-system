@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>病害页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css">
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">病害名：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入病害名" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="symptom">症状：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="symptom" id="symptom" autocomplete="off" placeholder="输入病害症状" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加新病害</button>
+    </div>
+    <div class="layui-card">
+        <table class="box" id="pest-table" lay-filter="tables"></table>
+    </div>
+</div>
+
+
+</body>
+
+<!--工具条-->
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        pest: 'disease'
+    }).use(['table', 'form', 'layer', 'element', 'disease'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let disease = layui.disease
+        let $ = layui.$
+
+        let pestTable = table.render({
+            elem: '#pest-table'
+            ,url: '/disease/getDiseaseList'//数据接口
+            ,cols: [[ //表头
+                {field: 'id', title: 'id', hide: true}
+                ,{field: 'name', title: '名称', align: 'center', width:200}
+                ,{field: 'damage', title: '主要危害', align: 'center',}
+                ,{field: 'pathogenesis', title: '发病规律', align: 'center',}
+                ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.diseaseList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        // 工具栏事件监听
+        table.on('tool(tables)', function (obj) {
+            let layEvent = obj.event
+            if (layEvent === 'detail') {
+                // 查看详情
+                layer.open({
+                    type: 2,
+                    title: '病害详情',
+                    area: ['1000px', '610px'],
+                    offset: '10px',
+                    content: './subPages/diseaseDetail.html',
+                    success: function (layero, index) {
+                        let iframe = window['layui-layer-iframe' + index]
+
+                        iframe.child(obj.data)
+
+                    }
+                })
+
+
+
+            } else if (layEvent === 'del') {
+                // 删除
+                layer.confirm('真的删除行么', function(index){
+
+                    console.log(obj.data)
+                    layer.close(index)
+                    // 发送删除指令
+                    disease.delDisease({id: obj.data.id}, function (res) {
+                        if (res.code === 200) {
+                            pestTable.reload()
+                        }
+                        layer.msg(res.msg)
+                    })
+                });
+            }
+        })
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            pestTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        $('#add').click(function () {
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加病害',
+                area: ['1000px', '610px'],
+                offset: '10px',
+                content: './subPages/addDisease.html'
+            })
+        })
+
+    })
+</script>
+</html>

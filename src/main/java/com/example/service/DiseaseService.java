@@ -1,0 +1,16 @@
+package com.example.service;
+
+import com.example.entities.Query.QueryDisease;
+import com.example.utils.ResultInfo;
+
+/**
+ * @author youngoo
+ */
+public interface DiseaseService {
+    /**
+     * 条件查询所有病害信息
+     * @param queryDisease 查询条件对象
+     * @return 统一返回的数据格式
+     */
+    ResultInfo queryList(QueryDisease queryDisease);
+}

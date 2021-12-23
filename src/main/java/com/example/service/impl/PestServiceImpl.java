@@ -22,7 +22,7 @@ public class PestServiceImpl implements PestService {
     /**
      * 根据条件，查询所有的害虫列表
      *
-     * @param queryPest 插叙条件
+     * @param queryPest 查询条件
      * @return 封装好的返回对象
      */
     @Override

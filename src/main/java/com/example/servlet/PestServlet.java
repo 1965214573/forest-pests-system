@@ -25,7 +25,7 @@ public class PestServlet extends BaseServlet{
         String host = request.getParameter("host");
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
-        String test = request.getParameter("test");
+
         if (page == null || limit == null) {
             return ResultInfo.err();
         } else {

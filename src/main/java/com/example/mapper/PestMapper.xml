@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.mapper.PestMapper">
+    <insert id="insertPest">
+        insert into detail_pest values(#{id}, #{pestName}, #{hostName}, #{breed}, #{enemy}, #{damage}, #{measures}, #{childPicture}, #{adultPicture})
+    </insert>
+    <delete id="deletePest">
+        delete from detail_pest where id = #{id}
+    </delete>
 
     <select id="countPest" resultType="java.lang.Integer">
         select count(*) from detail_pest

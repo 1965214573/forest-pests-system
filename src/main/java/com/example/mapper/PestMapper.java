@@ -37,4 +37,18 @@ public interface PestMapper {
      * @return 查询到的结合
      */
     List<Pest> queryAll(QueryPest queryPest);
+
+    /**
+     * 向数据库添加一条虫害记录
+     * @param pest 虫害信息
+     * @return 受影响的行数
+     */
+    int insertPest(Pest pest);
+
+    /**
+     * 删除一条虫害记录
+     * @param id 虫害id
+     * @return 受影响的行数
+     */
+    int deletePest(long id);
 }

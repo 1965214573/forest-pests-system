@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虫害子页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+    <style>
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form layui-container layui-form-pane content">
+    <div class="layui-row">
+        <div class="layui-col-md5">
+            <div class="layui-form-item">
+                <label for="pestName" class="layui-form-label">名称：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="name" id="pestName" name="pestName" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="host" class="layui-form-label">寄主：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="host" id="host" name="host" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="breed" class="layui-form-label">繁殖：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="breed" id="breed" name="breed" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="enemy" class="layui-form-label">天敌：</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="enemy" id="enemy" name="enemy" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label for="damage" class="layui-form-label">主要危害：</label>
+                <div class="layui-input-block">
+                    <textarea id="damage" name="damage" autocomplete="off" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label for="measure" class="layui-form-label">防治措施：</label>
+                <div class="layui-input-block">
+                    <textarea  id="measure" name="measure" autocomplete="off" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <div class="layui-btn layui-btn-warm layui-inline" id="upload-child">
+                        <i class="layui-icon">&#xe67c;</i>上传幼虫图片
+                    </div>
+                </div>
+                <div class="layui-input-block layui-hide">
+                    <input type="text" id="childPicture" name="childPicture">
+                </div>
+                <div class="layui-form-item">
+                    <div class="user-head-image layui-input-block" id="child-img"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <div class="layui-btn layui-btn-warm layui-inline" id="upload-adult">
+                        <i class="layui-icon">&#xe67c;</i>上传成虫图片
+                    </div>
+                </div>
+                <div class="layui-input-block layui-hide">
+                    <input type="text" id="adultPicture" name="adultPicture">
+                </div>
+                <div class="layui-form-item">
+                    <div class="user-head-image layui-input-block" id="adult-img"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        pest: 'pest'
+    }).use(['pest', 'setting', 'upload', 'form'], function () {
+        let pest = layui.pest
+        let setting = layui.setting
+        let upload = layui.upload
+        let form = layui.form
+        let $ = layui.$
+
+
+
+        // 表单提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            pest.addPest(data.field, function (res) {
+                if (res.code === 200) {
+                    // 弹出提示
+                    layer.msg(res.msg)
+                    // 刷新页面
+                    parent.location.reload()
+                    // 关闭页面
+                    let index= parent.layer.getFrameIndex(Window.name);
+                    parent.layer.close(index);
+
+                } else if (res.code === 400) {
+                    layer.msg(res.msg)
+
+                }
+            })
+            return false
+        });
+
+        // 表单验证
+        form.verify({
+            name: function (value) {
+                if (value === '') {
+                    return '名称不能为空'
+                }
+            },
+            host: function (value) {
+                if (value === '') {
+                    return '内容不能为空'
+                }
+            },
+            breed: function (value) {
+                if (value === '') {
+                    return '内容不能为空'
+                }
+            },
+            enemy: function (value) {
+                if (value === '') {
+                    return '名称不能为空'
+                }
+            }
+
+        })
+        console.log(setting.backgroundAddress)
+
+
+        upload.render({
+            elem: '#upload-child',
+            acceptMime: 'image/*',
+            size: 1024 * 2,
+            url: '/FileUploadServlet',
+            choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                let files = obj.pushFile();
+                //预读本地文件，如果是多文件，则会遍历。
+                obj.preview(function(index, file, result){
+                    console.log(index)
+                    //图片插入到选择框中，
+                    $("#child-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
+                });
+            },
+            done: function (res) {
+                $("#childPicture").val(res.data.src)
+            },
+            error: function(){
+                //请求异常回调
+            }
+        })
+
+        upload.render({
+            elem: '#upload-adult',
+            acceptMime: 'image/*',
+            size: 1024 * 2,
+            url: '/FileUploadServlet',
+            choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                let files = obj.pushFile();
+                //预读本地文件，如果是多文件，则会遍历。
+                obj.preview(function(index, file, result){
+                    //图片插入到选择框中，
+                    $("#adult-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
+                });
+            },
+            done: function (res) {
+                $("#adultPicture").val(res.data.src)
+            },
+            error: function(){
+                //请求异常回调
+            }
+        })
+    })
+</script>
+</html>

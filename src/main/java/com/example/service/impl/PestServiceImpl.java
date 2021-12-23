@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.entities.PO.Pest;
 import com.example.entities.Query.QueryPest;
 import com.example.mapper.PestMapper;
 import com.example.service.PestService;
@@ -16,6 +17,8 @@ import java.util.Map;
  * @date 2021/12/22 19:06
  */
 public class PestServiceImpl implements PestService {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
     /**
      * 根据条件，查询所有的害虫列表
      *
@@ -38,9 +41,52 @@ public class PestServiceImpl implements PestService {
                     .data(data)
                     .build();
         } catch (Exception e) {
-            Logger logger = Logger.getLogger(this.getClass());
+
             logger.debug("数据操作异常！");
             return ResultInfo.err();
         }
+    }
+
+    /**
+     * 添加虫害信息
+     *
+     * @param pest 虫害对象
+     * @return 返回对象
+     */
+    @Override
+    public ResultInfo addPest(Pest pest) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            PestMapper pestMapper = session.getMapper(PestMapper.class);
+            int row = pestMapper.insertPest(pest);
+            if (row != 0) {
+                session.commit();
+                return ResultInfo.ok();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.debug("操作失败");
+        }
+        return ResultInfo.err();
+    }
+
+    /**
+     * 根据id删除虫害信息
+     *
+     * @param id 虫害id
+     * @return 返回响应对象
+     */
+    @Override
+    public ResultInfo delPestById(long id) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            PestMapper pestMapper = session.getMapper(PestMapper.class);
+            if (pestMapper.deletePest(id) != 0) {
+                session.commit();
+                return ResultInfo.ok();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.debug("数据库操作异常");
+        }
+        return ResultInfo.err();
     }
 }

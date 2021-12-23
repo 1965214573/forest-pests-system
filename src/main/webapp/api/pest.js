@@ -13,6 +13,14 @@ layui.extend({
                 dataType: 'json',
                 success: func
             })
+        },
+        delPest: function (data, func) {
+            request({
+                url: '/pest/delPest',
+                type: 'post',
+                data: data,
+                success: func
+            })
         }
     }
 

@@ -43,17 +43,20 @@
 
 <!--工具条-->
 <script type="text/html" id="toolbar">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
-    layui.use(['table', 'form', 'layer', 'element'], function () {
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        pest: 'pest'
+    }).use(['table', 'form', 'layer', 'element', 'pest'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
-        let element = layui.element
+        let pest = layui.pest
         let $ = layui.$
 
         let pestTable = table.render({
@@ -82,8 +85,40 @@
             }
         });
 
+        // 工具栏事件监听
         table.on('tool(tables)', function (obj) {
-            alert(JSON.stringify(obj.data))
+            let layEvent = obj.event
+            if (layEvent === 'detail') {
+                // 查看详情
+                layer.open({
+                    type: 2,
+                    title: '虫害详情',
+                    area: ['1000px', '610px'],
+                    offset: '10px',
+                    content: './subPages/pestDetail.html',
+                    success: function (layero, index) {
+                        let iframe = window['layui-layer-iframe' + index]
+                        iframe.child(obj.data)
+                    }
+                })
+
+
+
+            } else if (layEvent === 'del') {
+                // 删除
+                layer.confirm('真的删除行么', function(index){
+
+                    console.log(obj.data)
+                    layer.close(index)
+                    // 发送删除指令
+                    pest.delPest({id: obj.data.id}, function (res) {
+                        if (res.code === 200) {
+                            pestTable.reload()
+                        }
+                        layer.msg(res.msg)
+                    })
+                });
+            }
         })
 
         //监听提交
@@ -102,7 +137,9 @@
             layer.open({
                 type: 2,
                 title: '添加虫害',
-                content: './subPages/pestDetail.html'
+                area: ['1000px', '610px'],
+                offset: '10px',
+                content: './subPages/addPest.html'
             })
         })
 

@@ -22,7 +22,7 @@ public class ResultInfo{
      */
     public static ResultInfo ok() {
         return builder().code(ResultCode.SUCCESS)
-                .msg("成功")
+                .msg("操作成功")
                 .build();
     }
 

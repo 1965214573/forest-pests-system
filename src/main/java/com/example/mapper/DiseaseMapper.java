@@ -29,4 +29,11 @@ public interface DiseaseMapper {
      * @return 受影响的行数
      */
     int insertOne(Disease disease);
+
+    /**
+     * 根据id删除一条记录
+     * @param id 病害id
+     * @return 受影响的行数
+     */
+    int delById(long id);
 }

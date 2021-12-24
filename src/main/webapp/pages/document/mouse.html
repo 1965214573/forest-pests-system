@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>虫害一览</title>
-    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <title>鼠害页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css">
     <style>
         .box {
             margin-top: 20px;
@@ -17,13 +17,13 @@
 <div class="box layui-row" >
     <form class="layui-form layui-input-inline">
         <div class="layui-form-item">
-            <label class="layui-form-label" for="pestName">害虫名：</label>
+            <label class="layui-form-label" for="name">病害名：</label>
             <div class="layui-input-inline">
-                <input type="text" name="pestName" id="pestName" autocomplete="off" placeholder="输入害虫名" class="layui-input">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入病害名" class="layui-input">
             </div>
-            <label class="layui-form-label" for="host">寄主：</label>
+            <label class="layui-form-label" for="symptom">症状：</label>
             <div class="layui-input-inline">
-                <input type="text" name="host" id="host" autocomplete="off" placeholder="输入寄主" class="layui-input">
+                <input type="text" name="symptom" id="symptom" autocomplete="off" placeholder="输入病害症状" class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
@@ -31,10 +31,10 @@
         </div>
     </form>
     <div class="layui-form-item layui-input-inline">
-        <button class="layui-btn" id="add">添加新虫害</button>
+        <button class="layui-btn" id="add">添加新病害</button>
     </div>
     <div class="layui-card">
-        <table class="box" id="pest-table" lay-filter="tables"></table>
+        <table class="box" id="mouse-table" lay-filter="tables"></table>
     </div>
 </div>
 
@@ -51,21 +51,21 @@
     layui.config({
         base: '../../api/'
     }).extend({
-        pest: 'pest'
-    }).use(['table', 'form', 'layer', 'element', 'pest'], function () {
+        pest: 'mouse'
+    }).use(['table', 'form', 'layer', 'element', 'mouse'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
-        let pest = layui.pest
+        let mouse = layui.mouse
         let $ = layui.$
 
-        let pestTable = table.render({
-            elem: '#pest-table'
-            ,url: '/pest/getPestList'//数据接口
+        let mouseTable = table.render({
+            elem: '#mouse-table'
+            ,url: '/mouse/getMouseList'//数据接口
             ,cols: [[ //表头
                 {field: 'id', title: 'id', hide: true}
-                ,{field: 'pestName', title: '名称', align: 'center', width:200}
-                ,{field: 'hostName', title: '寄主', align: 'center',}
+                ,{field: 'name', title: '名称', align: 'center', width:200}
+                ,{field: 'food', title: '食物', align: 'center',}
                 ,{field: 'damage', title: '主要危害', align: 'center',}
                 ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
             ]]
@@ -78,7 +78,7 @@
             ,parseData: function (res) {
                 return {
                     "code": res.code,
-                    "data": res.data.pestList,
+                    "data": res.data.mouseList,
                     "count": res.data.count,
                     "msg": res.msg
                 }
@@ -92,10 +92,10 @@
                 // 查看详情
                 layer.open({
                     type: 2,
-                    title: '虫害详情',
+                    title: '鼠害详情',
                     area: ['1000px', '610px'],
                     offset: '10px',
-                    content: './subPages/pestDetail.html',
+                    content: './subPages/mouseDetail.html',
                     success: function (layero, index) {
                         let iframe = window['layui-layer-iframe' + index]
 
@@ -113,9 +113,9 @@
                     console.log(obj.data)
                     layer.close(index)
                     // 发送删除指令
-                    pest.delPest({id: obj.data.id}, function (res) {
+                    mouse.delMouse({id: obj.data.id}, function (res) {
                         if (res.code === 200) {
-                            pestTable.reload({
+                            mouseTable.reload({
                                 page: {
                                     curr: 1
                                 }
@@ -129,7 +129,7 @@
 
         //监听提交
         form.on('submit(queryCondition)', function(data){
-            pestTable.reload({
+            mouseTable.reload({
                 where: data.field,
                 page: {
                     curr: 1
@@ -142,10 +142,10 @@
             // 打开一个新增页面
             layer.open({
                 type: 2,
-                title: '添加虫害',
+                title: '添加鼠害',
                 area: ['1000px', '610px'],
                 offset: '10px',
-                content: './subPages/addPest.html'
+                content: './subPages/addMouse.html'
             })
         })
 

@@ -5,6 +5,9 @@
         insert into detail_disease (id, name, cause, symptom, pictureUrl, pathogenesis, damage, measure)
         values (#{id}, #{name}, #{cause}, #{symptom}, #{pictureUrl}, #{pathogenesis}, #{damage}, #{measure})
     </insert>
+    <delete id="delById">
+        delete from detail_disease where id = #{id}
+    </delete>
     <select id="queryAll" resultType="com.example.entities.PO.Disease">
         select id, name, cause, symptom, pictureUrl, pathogenesis, damage, measure from detail_disease
         <where>
@@ -29,8 +32,5 @@
                 and symptom like concat('%', #{symptom}, '%')
             </if>
         </where>
-        <if test="page != null">
-            limit #{page}, #{limit}
-        </if>
     </select>
 </mapper>

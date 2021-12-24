@@ -21,4 +21,11 @@ public interface DiseaseService {
      * @return 统一返回数据格式
      */
     ResultInfo addDisease(Disease disease);
+
+    /**
+     * 根据id删除病害信息
+     * @param id 病害id
+     * @return 统一返回数据格式
+     */
+    ResultInfo delDisease(long id);
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠害子页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+    <style>
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="view"></div>
+<script id="detail" type="text/html">
+    <form class="layui-form layui-container layui-form-pane content">
+        <div class="layui-row">
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label for="name" class="layui-form-label">名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ d.name}}"  id="name" name="name" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="food" class="layui-form-label">食物：</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ d.food}}"  id="food" name="food" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="breed" class="layui-form-label">繁殖：</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ d.breed}}"  id="breed" name="breed" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="enemy" class="layui-form-label">天敌：</label>
+                    <div class="layui-input-block">
+                        <input type="text" value="{{ d.enemy}}"  id="enemy" name="enemy" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label for="damage" class="layui-form-label">主要危害：</label>
+                    <div class="layui-input-block">
+                        <textarea id="damage" name="damage" autocomplete="off" class="layui-textarea">{{ d.damage}}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label for="measure" class="layui-form-label">防治措施：</label>
+                    <div class="layui-input-block">
+                        <textarea  id="measure" name="measure" autocomplete="off" class="layui-textarea">{{ d.measure}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    症状图片
+                    <div class="layui-form-item">
+                        <div class="user-head-image layui-input-block" id="child-img">
+                            <img style='object-fit:cover' src="/{{ d.pictureUrl}}" height='100px'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</script>
+
+
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    let data
+    function child(data) {
+        // 渲染数据
+        show(data)
+    }
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        pest: 'pest'
+    }).use(['form', 'laytpl'], function () {
+
+        let laytpl = layui.laytpl
+        let $ = layui.$
+
+        window.show = function (data) {
+            laytpl($('#detail').html()).render(data, function (html) {
+                $('#view').html(html)
+            })
+        }
+    })
+</script>
+</html>

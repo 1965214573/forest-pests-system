@@ -115,7 +115,11 @@
                     // 发送删除指令
                     disease.delDisease({id: obj.data.id}, function (res) {
                         if (res.code === 200) {
-                            pestTable.reload()
+                            pestTable.reload({
+                                page: {
+                                    curr: 1
+                                }
+                            })
                         }
                         layer.msg(res.msg)
                     })

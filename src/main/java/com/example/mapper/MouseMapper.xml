@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.MouseMapper">
+    <insert id="insertOne">
+        insert into detail_mouse (id, name, food, breed, pictureUrl, enemy, damage, measure)
+        values (#{id}, #{name}, #{food}, #{breed}, #{pictureUrl}, #{enemy}, #{damage}, #{measure})
+    </insert>
+    <delete id="delById">
+        delete from detail_mouse where id = #{id}
+    </delete>
+    <select id="countAll" resultType="java.lang.Integer">
+        select count(*) from detail_mouse
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="queryAll" resultType="com.example.entities.PO.Mouse">
+        select id, name, food, breed, pictureUrl, enemy, damage, measure
+        from detail_mouse
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+</mapper>

@@ -40,9 +40,6 @@
                 and hostName like concat('%', #{host}, '%')
             </if>
         </where>
-        <if test="page != null">
-            limit #{page}, #{limit}
-        </if>
     </select>
 
 </mapper>

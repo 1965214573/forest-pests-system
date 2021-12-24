@@ -48,4 +48,13 @@ public class DiseaseServlet extends BaseServlet{
         DiseaseService diseaseService = new DiseaseServiceImpl();
         return diseaseService.addDisease(disease);
     }
+
+    public ResultInfo delDisease(HttpServletRequest request, HttpServletResponse response) {
+        // 处理参数
+        String idStr = request.getParameter("id");
+        long id = Long.parseLong(idStr);
+
+        DiseaseService diseaseService = new DiseaseServiceImpl();
+        return diseaseService.delDisease(id);
+    }
 }

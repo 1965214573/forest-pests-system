@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>区域一览页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">区域名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入区域名称" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="forestType">林种：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="forestType" id="forestType" autocomplete="off" placeholder="输入林种" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="classId">负责小班：</label>
+            <!--todo 动态加载小班信息-->
+            <div class="layui-input-inline">
+                <input type="text" name="classId" id="classId" autocomplete="off" placeholder="输入小班" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加区域</button>
+    </div>
+    <div class="layui-card">
+        <table class="box" id="area-table" lay-filter="tables"></table>
+    </div>
+</div>
+
+
+</body>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        pest: 'area'
+    }).use(['table', 'form', 'layer', 'element', 'area'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let area = layui.area
+        let $ = layui.$
+
+        let areaTable = table.render({
+            elem: '#area-table'
+            ,url: '/area/getAreaList'//数据接口
+            ,cols: [[ //表头
+                {field: 'id', title: 'id', hide: true}
+                ,{field: 'name', title: '区域名称', align: 'center', width:200}
+                ,{field: 'forestType', title: '林种', align: 'center'}
+                ,{field: 'landType', title: '地类', align: 'center'}
+                ,{field: 'dominantTree', title: '优势树种', align: 'center'}
+                ,{field: 'className', title: '负责小班', align: 'center'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.areaList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            console.log(data.field)
+            areaTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        $('#add').click(function () {
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加区域',
+                area: ['500px', '400px'],
+                offset: '10px',
+                content: './subPages/addArea.html'
+            })
+        })
+
+    })
+</script>
+</html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.AreaMapper">
+    <insert id="insertOne">
+        insert into disaster_area (id, name, forestType, landTypeId, dominantTree) values(#{id}, #{name}, #{forestType}, #{landType}, #{dominantTree})
+    </insert>
+    <select id="queryLandType" resultType="com.example.entities.PO.LandType">
+        select id, landType from area_landtype
+    </select>
+    <select id="queryAll" resultType="com.example.entities.VO.AreaVO">
+        SELECT
+            disaster_area.id,
+            disaster_area.`name`,
+            disaster_area.forestType,
+            area_landtype.landType,
+            disaster_area.dominantTree,
+            disaster_class.`name` as `className`
+        FROM
+            disaster_area
+                LEFT JOIN
+            disaster_class
+            ON
+                disaster_area.classId = disaster_class.id
+                LEFT JOIN
+            area_landtype
+            ON
+                disaster_area.landTypeId = area_landtype.id
+
+        <where>
+            <if test="name != null and name != ''">
+                and disaster_area.name like concat('%', #{name}, '%')
+            </if>
+            <if test="forestType != null and name != ''">
+                and disaster_area.forestType like concat('%', #{forestType}, '%')
+            </if>
+            <if test="classId != null">
+                and disaster_area.classId = #{classId}
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        disaster_area
+        LEFT JOIN
+        disaster_class
+        ON
+        disaster_area.classId = disaster_class.id
+        LEFT JOIN
+        area_landtype
+        ON
+        disaster_area.landTypeId = area_landtype.id
+
+        <where>
+            <if test="name != null and name != ''">
+                and disaster_area.name like concat('%', #{name}, '%')
+            </if>
+            <if test="forestType != null and name != ''">
+                and disaster_area.forestType like concat('%', #{forestType}, '%')
+            </if>
+            <if test="classId != null">
+                and disaster_area.classId = #{classId}
+            </if>
+        </where>
+    </select>
+</mapper>

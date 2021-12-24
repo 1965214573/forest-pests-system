@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.entities.PO.Disease;
 import com.example.entities.Query.QueryDisease;
 import com.example.mapper.DiseaseMapper;
 import com.example.mapper.PestMapper;
@@ -45,5 +46,26 @@ public class DiseaseServiceImpl implements DiseaseService {
             logger.debug("数据操作异常！");
             return ResultInfo.err();
         }
+    }
+
+    /**
+     * 添加病害信息
+     * @param disease 病害对象
+     * @return 统一结果对象
+     */
+    @Override
+    public ResultInfo addDisease(Disease disease) {
+
+        try (SqlSession session = MybatisUtil.getSession()) {
+            DiseaseMapper diseaseMapper = session.getMapper(DiseaseMapper.class);
+            if (diseaseMapper.insertOne(disease) != 0) {
+                session.commit();
+                return ResultInfo.ok();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.debug("数据操作异常！");
+        }
+        return ResultInfo.err();
     }
 }

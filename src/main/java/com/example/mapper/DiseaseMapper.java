@@ -22,4 +22,11 @@ public interface DiseaseMapper {
      * @return 病害列表
      */
     List<Disease> queryAll(QueryDisease queryDisease);
+
+    /**
+     * 添加一条数据
+     * @param disease 要添加的病害对象
+     * @return 受影响的行数
+     */
+    int insertOne(Disease disease);
 }

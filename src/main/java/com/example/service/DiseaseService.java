@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.entities.PO.Disease;
 import com.example.entities.Query.QueryDisease;
 import com.example.utils.ResultInfo;
 
@@ -13,4 +14,11 @@ public interface DiseaseService {
      * @return 统一返回的数据格式
      */
     ResultInfo queryList(QueryDisease queryDisease);
+
+    /**
+     * 添加病害信息
+     * @param disease 病害对象
+     * @return 统一返回数据格式
+     */
+    ResultInfo addDisease(Disease disease);
 }

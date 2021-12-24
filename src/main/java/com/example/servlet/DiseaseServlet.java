@@ -1,5 +1,6 @@
 package com.example.servlet;
 
+import com.example.entities.PO.Disease;
 import com.example.entities.Query.QueryDisease;
 import com.example.entities.Query.QueryPest;
 import com.example.service.DiseaseService;
@@ -7,6 +8,7 @@ import com.example.service.PestService;
 import com.example.service.impl.DiseaseServiceImpl;
 import com.example.service.impl.PestServiceImpl;
 import com.example.utils.ResultInfo;
+import com.example.utils.SnowIdUtils;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,5 +32,20 @@ public class DiseaseServlet extends BaseServlet{
             DiseaseService diseaseService = new DiseaseServiceImpl();
             return diseaseService.queryList(queryDisease);
         }
+    }
+
+    public ResultInfo addDisease(HttpServletRequest request, HttpServletResponse response) {
+        // 处理参数
+        String name = request.getParameter("name");
+        String cause = request.getParameter("cause");
+        String symptom = request.getParameter("symptom");
+        String pictureUrl = request.getParameter("pictureUrl");
+        String pathogenesis = request.getParameter("pathogenesis");
+        String damage = request.getParameter("damage");
+        String measure = request.getParameter("measure");
+        long id = SnowIdUtils.uniqueLong();
+        Disease disease = new Disease(id, name, cause, symptom, pictureUrl, pathogenesis, damage, measure);
+        DiseaseService diseaseService = new DiseaseServiceImpl();
+        return diseaseService.addDisease(disease);
     }
 }

@@ -19,6 +19,12 @@ layui.extend({
                 success: func
             })
 
+        },
+        getNoClassAreaList: function (func) {
+            request({
+                url: '/area/getNoClassArea',
+                success: func
+            })
         }
     }
 

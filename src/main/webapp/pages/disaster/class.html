@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小班管理页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">小班名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入区域名称" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="areaId">负责区域：</label>
+            <!--todo 动态加载小班信息-->
+            <div class="layui-input-inline">
+                <input type="text" name="areaId" id="areaId" autocomplete="off" placeholder="输入区域" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加小班</button>
+    </div>
+    <div class="layui-card">
+        <table class="box" id="class-table" lay-filter="tables"></table>
+    </div>
+</div>
+
+
+</body>
+
+<!--工具条-->
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        pest: 'class'
+    }).use(['table', 'form', 'layer', 'element', 'class'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let clazz = layui.class
+        let $ = layui.$
+
+        let classTable = table.render({
+            elem: '#class-table'
+            ,url: '/class/getClassList'//数据接口
+            ,cols: [[ //表头
+                {field: 'id', title: 'id', hide: true}
+                ,{field: 'name', title: '小班名称', align: 'center', width:200}
+                ,{field: 'principal', title: '负责人', align: 'center'}
+                ,{field: 'phone', title: '负责人电话', align: 'center'}
+                ,{field: 'area.name', title: '负责区域', align: 'center', templet: function (data) {
+                        return data.area.name
+                    }}
+                ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.classList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            console.log(data.field)
+            classTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        $('#add').click(function () {
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加小班',
+                area: ['500px', '500px'],
+                offset: '10px',
+                content: './subPages/addClass.html'
+            })
+        })
+
+    })
+</script>
+</html>

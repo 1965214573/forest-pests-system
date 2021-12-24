@@ -27,4 +27,10 @@ public interface AreaService {
      * @return 统一查询结果
      */
     ResultInfo queryAreaList(QueryArea queryArea);
+
+    /**
+     * 查询未绑定小班的区域
+     * @return 统一查询结果
+     */
+    ResultInfo queryNoClassArea();
 }

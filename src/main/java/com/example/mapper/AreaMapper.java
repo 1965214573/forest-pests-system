@@ -4,6 +4,7 @@ import com.example.entities.PO.Area;
 import com.example.entities.PO.LandType;
 import com.example.entities.Query.QueryArea;
 import com.example.entities.VO.AreaVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -38,4 +39,18 @@ public interface AreaMapper {
      * @return 总计
      */
     int countAll(QueryArea queryArea);
+
+    /**
+     * 查询未绑定的区域信息
+     * @return 区域集合
+     */
+    List<Area> queryNoClassArea();
+
+    /**
+     * 将区域信息与小班信息进行绑定
+     * @param areaId 区域id
+     * @param classId 小班id
+     * @return 受影响的行数
+     */
+    int BindClass(@Param("areaId") long areaId, @Param("classId") long classId);
 }

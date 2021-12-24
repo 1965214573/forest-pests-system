@@ -47,4 +47,9 @@ public class AreaServlet extends BaseServlet{
         AreaService areaService = new AreaServiceImpl();
         return areaService.queryAreaList(queryArea);
     }
+
+    public ResultInfo getNoClassArea(HttpServletRequest request, HttpServletResponse response) {
+        AreaService areaService = new AreaServiceImpl();
+        return areaService.queryNoClassArea();
+    }
 }

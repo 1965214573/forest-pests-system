@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.ClassMapper">
+    <insert id="insertOne">
+        insert into disaster_class (id, name, principal, phone, peopleCount, createDate)
+        VALUES (#{id}, #{name}, #{principal}, #{phone}, #{peopleCount}, #{createDate})
+    </insert>
+    <resultMap id="ClassVOMap" type="com.example.entities.VO.ClassVO">
+        <id property="id" column="classId"/>
+        <result property="name" column="className"/>
+        <result property="principal" column="principal"/>
+        <result property="phone" column="phone"/>
+        <result property="peopleCount" column="peopleCount"/>
+        <result property="createDate" column="createDate"/>
+        <association property="area" javaType="com.example.entities.VO.AreaVO">
+            <id property="id" column="areaId"/>
+            <result property="name" column="areaName"/>
+            <result property="forestType" column="forestType"/>
+            <result property="landType" column="landType"/>
+            <result property="dominantTree" column="dominantTree"/>
+        </association>
+    </resultMap>
+    <select id="queryAll" resultMap="ClassVOMap">
+        SELECT
+            disaster_class.id AS classId,
+            disaster_class.`name` AS className,
+            disaster_class.principal,
+            disaster_class.phone,
+            disaster_class.peopleCount,
+            disaster_area.id AS areaId,
+            disaster_area.`name` AS areaName,
+            disaster_area.forestType,
+            area_landtype.landType,
+            disaster_area.dominantTree,
+            disaster_class.createDate
+        FROM
+            disaster_class
+                LEFT JOIN
+            disaster_area
+            ON
+                disaster_class.id = disaster_area.classId
+                LEFT JOIN
+            area_landtype
+            ON
+                disaster_area.landTypeId = area_landtype.id
+        <where>
+                    <!--todo-->
+            <if test="className != null and className != ''">
+                and disaster_class.name = #{className}
+            </if>
+            <if test="areaId != null">
+                and disaster_area.id = #{areaId}
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countClass" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        disaster_class
+        LEFT JOIN
+        disaster_area
+        ON
+        disaster_class.id = disaster_area.classId
+        LEFT JOIN
+        area_landtype
+        ON
+        disaster_area.landTypeId = area_landtype.id
+        <where>
+            <if test="className != null and className != ''">
+                and disaster_class.name = #{className}
+            </if>
+            <if test="areaId != null">
+                and disaster_area.id = #{areaId}
+            </if>
+        </where>
+    </select>
+</mapper>

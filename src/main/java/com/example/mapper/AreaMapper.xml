@@ -4,6 +4,9 @@
     <insert id="insertOne">
         insert into disaster_area (id, name, forestType, landTypeId, dominantTree) values(#{id}, #{name}, #{forestType}, #{landType}, #{dominantTree})
     </insert>
+    <update id="BindClass">
+        update disaster_area set classId = #{classId} where id = #{areaId}
+    </update>
     <select id="queryLandType" resultType="com.example.entities.PO.LandType">
         select id, landType from area_landtype
     </select>
@@ -66,5 +69,8 @@
                 and disaster_area.classId = #{classId}
             </if>
         </where>
+    </select>
+    <select id="queryNoClassArea" resultType="com.example.entities.PO.Area">
+        SELECT id, name, forestType, landTypeId, dominantTree, classId FROM disaster_area WHERE classId is NULL
     </select>
 </mapper>

@@ -95,4 +95,28 @@ public class AreaServiceImpl implements AreaService {
         }
         return ResultInfo.err();
     }
+
+    /**
+     * 查询未绑定小班的区域
+     *
+     * @return 统一查询结果
+     */
+    @Override
+    public ResultInfo queryNoClassArea() {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            AreaMapper areaMapper = session.getMapper(AreaMapper.class);
+            List<Area> areaList = areaMapper.queryNoClassArea();
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("areaList", areaList);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("未绑定区域数据")
+                    .data(data)
+                    .build();
+
+        } catch (Exception e) {
+            logger.debug("数据库操作失败");
+        }
+        return ResultInfo.err();
+    }
 }

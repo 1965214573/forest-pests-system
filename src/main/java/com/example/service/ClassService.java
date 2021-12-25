@@ -22,4 +22,10 @@ public interface ClassService {
      * @return 统一结果对象
      */
     ResultInfo queryList(QueryClass queryClass);
+
+    /**
+     * 直接获取小班简单信息
+     * @return 统一结果对象
+     */
+    ResultInfo querySimpleList();
 }

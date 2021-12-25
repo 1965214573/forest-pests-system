@@ -1,12 +1,8 @@
-layui.extend({
-    setting: 'config/global',
-    request: 'util/request'
-}).define(['setting', 'request'], function (exports) {
-    let request = layui.request
-    request.setting = layui.setting
+layui.define(['service'], function (exports) {
+    let service = layui.service
     let obj = {
         addDisease: function (data, func) {
-            request({
+            service({
                 url: '/disease/addDisease',
                 type: 'post',
                 data: data,
@@ -15,7 +11,7 @@ layui.extend({
             })
         },
         delDisease: function (data, func) {
-            request({
+            service({
                 url: '/disease/delDisease',
                 type: 'post',
                 data: data,

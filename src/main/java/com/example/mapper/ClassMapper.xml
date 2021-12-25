@@ -44,9 +44,8 @@
             ON
                 disaster_area.landTypeId = area_landtype.id
         <where>
-                    <!--todo-->
             <if test="className != null and className != ''">
-                and disaster_class.name = #{className}
+                and disaster_class.name like concat('%', #{className}, '%')
             </if>
             <if test="areaId != null">
                 and disaster_area.id = #{areaId}
@@ -71,11 +70,14 @@
         disaster_area.landTypeId = area_landtype.id
         <where>
             <if test="className != null and className != ''">
-                and disaster_class.name = #{className}
+                and disaster_class.name like concat('%', #{className}, '%')
             </if>
             <if test="areaId != null">
                 and disaster_area.id = #{areaId}
             </if>
         </where>
+    </select>
+    <select id="querySimpleAll" resultType="com.example.entities.PO.Clazz">
+        select id, name, principal, phone, peopleCount, createDate from disaster_class
     </select>
 </mapper>

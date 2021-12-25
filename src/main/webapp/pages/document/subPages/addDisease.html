@@ -83,8 +83,8 @@
     layui.config({
         base: '../../../api/'
     }).extend({
-        pest: 'disease'
-    }).use(['disease', 'setting', 'upload', 'form'], function () {
+        request: 'util/request'
+    }).use(['request', 'setting', 'upload', 'form'], function () {
         let disease = layui.disease
         let setting = layui.setting
         let upload = layui.upload

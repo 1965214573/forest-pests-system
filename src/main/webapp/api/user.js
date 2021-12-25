@@ -1,12 +1,8 @@
-layui.extend({
-    setting: 'config/global',
-    request: 'util/request'
-}).define(['setting', 'request'], function (exports) {
-    let request = layui.request
-    request.setting = layui.setting
+layui.define(['service'], function (exports) {
+    let service = layui.service
     let obj = {
         getMenu: function (data, fun) {
-            request.ajax({
+            service({
                 url: '/menu.do',
                 type: 'get',
                 data: data,
@@ -16,7 +12,7 @@ layui.extend({
         },
 
         test: function (fun) {
-            request({
+            service({
                 url: '/menu.do',
                 type: 'get',
                 data: data,

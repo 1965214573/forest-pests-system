@@ -17,9 +17,9 @@
 <div class="box layui-row" >
     <form class="layui-form layui-input-inline">
         <div class="layui-form-item">
-            <label class="layui-form-label" for="name">小班名称：</label>
+            <label class="layui-form-label" for="className">小班名称：</label>
             <div class="layui-input-inline">
-                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入区域名称" class="layui-input">
+                <input type="text" name="className" id="className" autocomplete="off" placeholder="输入区域名称" class="layui-input">
             </div>
             <label class="layui-form-label" for="areaId">负责区域：</label>
             <!--todo 动态加载小班信息-->
@@ -49,17 +49,19 @@
 </script>
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
+    var rowData
     layui.config({
         base: '../../api/'
     }).extend({
-        pest: 'class'
-    }).use(['table', 'form', 'layer', 'element', 'class'], function () {
+        request: 'util/request'
+    }).use(['table', 'form', 'layer', 'element', 'request'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
         let clazz = layui.class
         let $ = layui.$
 
+        // 表格数据渲染
         let classTable = table.render({
             elem: '#class-table'
             ,url: '/class/getClassList'//数据接口
@@ -91,7 +93,6 @@
 
         //监听提交
         form.on('submit(queryCondition)', function(data){
-            console.log(data.field)
             classTable.reload({
                 where: data.field,
                 page: {
@@ -101,17 +102,29 @@
             return false;
         });
 
+        // 添加小班功能
         $('#add').click(function () {
             // 打开一个新增页面
             layer.open({
                 type: 2,
                 title: '添加小班',
                 area: ['500px', '500px'],
-                offset: '10px',
                 content: './subPages/addClass.html'
             })
         })
 
+        table.on('tool(tables)', function (obj) {
+            rowData = obj.data
+            let layEvent = obj.event
+            rowData.operator = layEvent
+
+            layer.open({
+                type: 2,
+                title: (layEvent === 'edit' ? '编辑' : '查看') +'小班信息',
+                area: ['1000px', '600px'],
+                content: './subPages/ClassDetail.html'
+            })
+        })
     })
 </script>
 </html>

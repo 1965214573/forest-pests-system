@@ -84,8 +84,8 @@
     layui.config({
         base: '../../../api/'
     }).extend({
-        pest: 'pest'
-    }).use(['form', 'laytpl'], function () {
+        request: 'util/request'
+    }).use(['form', 'laytpl', 'request'], function () {
 
         let form = layui.form
         let laytpl = layui.laytpl

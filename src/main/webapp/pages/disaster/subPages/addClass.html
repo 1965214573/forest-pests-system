@@ -40,7 +40,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
+                <button class="layui-btn" lay-submit lay-filter="formDemo" id="add">添加</button>
             </div>
         </div>
     </form>
@@ -58,17 +58,23 @@
     layui.config({
         base: '../../../api/'
     }).extend({
-        area: 'area',
-        class: 'class'
-    }).use(['area', 'class', 'form', 'laytpl'], function () {
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl', 'layer'], function () {
         let area = layui.area
         let clazz = layui.class
         let form = layui.form
         let laytpl = layui.laytpl
+        let layer = layui.layer
         let $ = layui.$
 
         // 渲染地类下拉列表
         area.getNoClassAreaList(function (res) {
+            console.log(res)
+            if (res.code !== 200 || res.data.areaList.length === 0) {
+                // 将添加设为禁用
+                $('#add').hide()
+                layer.msg('暂无可管理的区域！')
+            }
             laytpl($('#landTypeList').html()).render(res.data, function (html) {
                 $('#view').html(html)
                 form.render('select')

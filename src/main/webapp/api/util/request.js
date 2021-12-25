@@ -1,21 +1,13 @@
-layui.define(['jquery', 'setting'], function(exports){
-    let setting = layui.setting
-    let $ = layui.$
-
-    $.ajaxPrefilter(function (options) {
-        options.url = setting.backgroundAddress + options.url
-        options.dataType = (typeof(options.dataType) === 'undefined') ? setting.dataType : options.dataType
-    })
-
-    let obj = function (options) {
-        options.statusCode =  {
-            404: function() {
-                alert("page not found")
-            }
-        }
-        $.ajax(options)
-    }
-
+layui.extend({
+    setting: 'config/global',
+    service: 'util/service',
+    user: 'user',
+    area: 'area',
+    class: 'class',
+    disease: 'disease',
+    mouse: 'mouse',
+    pest: 'pest'
+}).define(['setting', 'service', 'user', 'area', 'class', 'disease', 'mouse', 'pest'], function(exports){
     //输出 request 接口
-    exports('request', obj);
+    exports('request');
 });

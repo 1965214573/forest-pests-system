@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="box layui-row" >
-    <form class="layui-form layui-input-inline">
+    <form class="layui-form layui-input-inline" lay-filter="queryArea">
         <div class="layui-form-item">
             <label class="layui-form-label" for="name">区域名称：</label>
             <div class="layui-input-inline">
@@ -25,11 +25,7 @@
             <div class="layui-input-inline">
                 <input type="text" name="forestType" id="forestType" autocomplete="off" placeholder="输入林种" class="layui-input">
             </div>
-            <label class="layui-form-label" for="classId">负责小班：</label>
-            <!--todo 动态加载小班信息-->
-            <div class="layui-input-inline">
-                <input type="text" name="classId" id="classId" autocomplete="off" placeholder="输入小班" class="layui-input">
-            </div>
+           <span id="class-select"></span>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
             </div>
@@ -38,27 +34,49 @@
     <div class="layui-form-item layui-input-inline">
         <button class="layui-btn" id="add">添加区域</button>
     </div>
+
     <div class="layui-card">
         <table class="box" id="area-table" lay-filter="tables"></table>
     </div>
 </div>
-
-
 </body>
+
+<script type="text/html" id="select-html">
+    <label class="layui-form-label" for="classId">负责小班：</label>
+    <div class="layui-input-inline">
+        <select name="classId" id="classId">
+            {{# layui.each(d.classList, function (index, item) {}}
+            <option value="{{ item.id}}">{{ item.name}}</option>
+            {{# }) }}
+        </select>
+    </div>
+</script>
 
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
     layui.config({
         base: '../../api/'
     }).extend({
-        pest: 'area'
-    }).use(['table', 'form', 'layer', 'element', 'area'], function () {
+        request: 'util/request'
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
-        let area = layui.area
+        let clazz = layui.class
+        let laytpl = layui.laytpl
         let $ = layui.$
 
+        // 获取小班信息，如果有，进行渲染
+        clazz.getClass(function (res) {
+            if (res.code === 200 && res.data.classList.length !== 0) {
+                laytpl($('#select-html').html()).render(res.data, function (html) {
+                    $('#class-select').html(html)
+                    form.render('select', 'queryArea')
+                })
+            }
+        })
+
+        // 区域数据渲染
         let areaTable = table.render({
             elem: '#area-table'
             ,url: '/area/getAreaList'//数据接口
@@ -88,7 +106,6 @@
 
         //监听提交
         form.on('submit(queryCondition)', function(data){
-            console.log(data.field)
             areaTable.reload({
                 where: data.field,
                 page: {
@@ -104,7 +121,6 @@
                 type: 2,
                 title: '添加区域',
                 area: ['500px', '400px'],
-                offset: '10px',
                 content: './subPages/addArea.html'
             })
         })

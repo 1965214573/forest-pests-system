@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="layui-fluid" style="padding: 30px 60px">
-    <form class="layui-form">
+    <div class="layui-form" lay-filter="addArea">
         <div class="layui-form-item">
             <label class="layui-form-label" for="name">名称：</label>
             <div class="layui-input-block">
@@ -37,7 +37,7 @@
                 <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 <script type="text/html" id="landTypeList">
@@ -52,8 +52,8 @@
     layui.config({
         base: '../../../api/'
     }).extend({
-        area: 'area'
-    }).use(['area', 'form', 'laytpl'], function () {
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl'], function () {
         let area = layui.area
         let form = layui.form
         let laytpl = layui.laytpl
@@ -63,7 +63,7 @@
         area.getLandType(function (res) {
             laytpl($('#landTypeList').html()).render(res.data, function (html) {
                 $('#view').html(html)
-                form.render('select')
+                form.render('select', 'addArea')
             })
         })
 

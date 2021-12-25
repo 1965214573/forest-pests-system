@@ -83,8 +83,8 @@
     layui.config({
         base: '../../../api/'
     }).extend({
-        pest: 'mouse'
-    }).use(['mouse', 'setting', 'upload', 'form'], function () {
+        request: 'util/request'
+    }).use(['request', 'setting', 'upload', 'form'], function () {
         let mouse = layui.mouse
         let setting = layui.setting
         let upload = layui.upload

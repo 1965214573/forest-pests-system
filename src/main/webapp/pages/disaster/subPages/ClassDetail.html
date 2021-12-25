@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小班详情</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-row">
+    <form class="layui-form" action="" onsubmit="return false" style="padding: 60px" lay-filter="classDetail">
+        <div class="layui-col-md4 layui-col-md-offset1">
+            <div class="grid-demo">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="className">名称:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="className" id="className"  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人电话:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone"  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="area-input">
+                    <label class="layui-form-label">负责区域:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="areaName"  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <span id="area"></span>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地类:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="landType" id="landType" disabled   placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">创建时间:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="createDate"  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4 layui-col-md-offset1">
+            <div class="grid-demo">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="principal"  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">人员数量:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="peopleCount" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">林种:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="forestType" id="forestType" disabled lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">优势树种:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dominantTree" id="dominantTree" disabled lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="submit-box">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+</body>
+<script type="text/html" id="area-select">
+    <div class="layui-form-item">
+        <label class="layui-form-label">负责区域:</label>
+        <div class="layui-input-block">
+            <select name="areaId" id="areaId" lay-filter="areaId">
+                {{# layui.each(d.areaList, function(index, item){ }}
+                <option value="{{ item.id}}">{{ item.name}}</option>
+                {{# }) }}
+            </select>
+        </div>
+    </div>
+</script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl'], function () {
+        let form = layui.form
+        let area = layui.area
+        let laytpl = layui.laytpl
+        let $ = layui.$
+
+        let noClassArea
+
+        let rowData = parent.rowData
+        let submitBox = $('#submit-box')
+        let areaInput = $('#area-input')
+        submitBox.hide()
+        areaInput.hide()
+
+        if (rowData.operator === 'detail') {
+            areaInput.show()
+            form.val('classDetail', {
+                'className': rowData.name,
+                'phone': rowData.phone,
+                'landType': rowData.area.landType,
+                'areaName': rowData.area.name,
+                'createDate': rowData.createDate,
+                'principal': rowData.principal,
+                'peopleCount': rowData.peopleCount,
+                'forestType': rowData.area.forestType,
+                'dominantTree': rowData.area.dominantTree
+            })
+        } else if (rowData.operator === 'edit') {
+            submitBox.show()
+            form.val('classDetail', {
+                'className': rowData.name,
+                'phone': rowData.phone,
+                'createDate': rowData.createDate,
+                'principal': rowData.principal,
+                'peopleCount': rowData.peopleCount,
+                'forestType': rowData.area.forestType,
+                'landType': rowData.area.landType,
+                'dominantTree': rowData.area.dominantTree
+            })
+            area.getNoClassAreaList(function (res) {
+
+                noClassArea = res.data.areaList
+                noClassArea.push(rowData.area)
+                laytpl($('#area-select').html()).render(res.data, function (html) {
+                    $('#area').html(html)
+                    $('#areaId option[value=' + rowData.area.id+']').prop('selected', 'selected')
+                    form.render('select')
+                    form.render('input')
+                })
+            })
+        }
+        
+        form.on('submit(formDemo)', function (data) {
+            let classData = data.field
+            console.log(classData)
+        })
+
+        form.on('select(areaId)', function (data) {
+            let areas = noClassArea.filter(function (item) {
+                return item.id === data.value
+            })
+
+            $('#forestType').val(areas[0].forestType)
+            $('#landType').val(areas[0].landType)
+            $('#dominantTree').val(areas[0].dominantTree)
+            form.render()
+        })
+    })
+</script>
+</html>

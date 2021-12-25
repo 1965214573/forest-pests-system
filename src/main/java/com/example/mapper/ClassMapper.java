@@ -30,4 +30,10 @@ public interface ClassMapper {
      * @return 小班数量
      */
     int countClass(QueryClass queryClass);
+
+    /**
+     * 简单查询所有小班信息
+     * @return 小班列表
+     */
+    List<Clazz> querySimpleAll();
 }

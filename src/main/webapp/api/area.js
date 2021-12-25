@@ -1,19 +1,15 @@
-layui.extend({
-    setting: 'config/global',
-    request: 'util/request'
-}).define(['setting', 'request'], function (exports) {
-    let request = layui.request
-    request.setting = layui.setting
+layui.define(['service'], function (exports) {
+    let service = layui.service
     let obj = {
         getLandType: function (func) {
-            request({
+            service({
                 url: '/area/getLandList',
                 success: func
             })
 
         },
         addArea: function (data, func) {
-            request({
+            service({
                 url: '/area/addArea',
                 data: data,
                 success: func
@@ -21,7 +17,7 @@ layui.extend({
 
         },
         getNoClassAreaList: function (func) {
-            request({
+            service({
                 url: '/area/getNoClassArea',
                 success: func
             })

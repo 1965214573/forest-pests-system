@@ -41,4 +41,9 @@ public class ClassServlet extends BaseServlet{
         ClassService classService = new ClassServiceImpl();
         return classService.queryList(queryClass);
     }
+
+    public ResultInfo getClass(HttpServletRequest request, HttpServletResponse response) {
+        ClassService classService = new ClassServiceImpl();
+        return classService.querySimpleList();
+    }
 }

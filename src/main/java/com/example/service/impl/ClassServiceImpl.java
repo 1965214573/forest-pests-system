@@ -75,4 +75,27 @@ public class ClassServiceImpl implements ClassService {
         }
         return ResultInfo.err();
     }
+
+    /**
+     * 直接获取小班简单信息
+     *
+     * @return 统一结果对象
+     */
+    @Override
+    public ResultInfo querySimpleList() {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            ClassMapper classMapper = session.getMapper(ClassMapper.class);
+            List<Clazz> clazzList = classMapper.querySimpleAll();
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("classList", clazzList);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("小班信息")
+                    .data(data)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultInfo.err();
+    }
 }

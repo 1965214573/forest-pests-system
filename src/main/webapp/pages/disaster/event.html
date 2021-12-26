@@ -2,9 +2,180 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>事件记录页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
 </head>
 <body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline" lay-filter="queryArea">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">事件名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入区域名称" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="disasterStage">灾情状态：</label>
+            <div class="layui-input-inline">
+                <select name="disasterStage" id="disasterStage">
+                    <option value="1" selected>已得到控制</option>
+                    <option value="2">防治中</option>
+                    <option value="3">无法解决</option>
+                </select>
+            </div>
+            <span id="area-select"></span>
+            <label class="layui-form-label" for="startDate">起始日期：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="startDate" id="startDate" autocomplete="off" placeholder="输入林种" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="endDate">结束日期：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endDate" id="endDate" autocomplete="off" placeholder="输入林种" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加事件</button>
+    </div>
 
+    <div class="layui-card">
+        <table class="box" id="event-table" lay-filter="tables"></table>
+    </div>
+</div>
 </body>
+
+<script type="text/html" id="select-html">
+    <label class="layui-form-label" for="classId">发生区域：</label>
+    <div class="layui-input-inline">
+        <select name="classId" id="classId">
+            {{# layui.each(d.areaList, function (index, item) {}}
+            <option value="{{ item.id}}">{{ item.name}}</option>
+            {{# }) }}
+        </select>
+    </div>
+</script>
+
+<script type="text/html" id="disaster-stage-btn">
+{{# if (d.disasterStage == 1){ }}
+<div class="layui-btn layui-btn-xs">已得到控制</div>
+{{# } else if (d.disasterStage == 2){ }}
+<div class="layui-btn layui-btn-normal layui-btn-xs">防治中</div>
+{{# } else if (d.disasterStage == 3){ }}
+<div class="layui-btn layui-btn-danger layui-btn-xs">无法解决</div>
+{{# } }}
+</script>
+
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="profession">申请专家会商</a>
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    var data = {}
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl', 'laydate'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let area = layui.area
+        let laytpl = layui.laytpl
+        let laydate = layui.laydate
+        let $ = layui.$
+
+        // 获取小班信息，如果有，进行渲染
+        area.getAllArea(function (res) {
+            if (res.code === 200 && res.data.classList.length !== 0) {
+                laytpl($('#select-html').html()).render(res.data, function (html) {
+                    $('#area-select').html(html)
+                    form.render('select')
+                })
+            }
+        })
+
+        laydate.render({
+            elem: '#startDate',
+            max: 0
+        })
+
+        laydate.render({
+            elem: '#endDate',
+            max: 0
+        })
+
+        // 区域数据渲染
+        let eventTable = table.render({
+            elem: '#event-table'
+            ,url: '/event/getEventList'//数据接口
+            ,cols: [[ //表头
+                {field: 'name', title: '事件名称', align: 'center', width:200}
+                ,{field: 'createDate', title: '日期', align: 'center'}
+                ,{field: 'areaName', title: '发生区域', align: 'center'}
+                ,{field: 'measure', title: '防治方案', align: 'center'}
+                ,{field: 'disasterStage', title: '灾情状态', align: 'center', templet: '#disaster-stage-btn'}
+                ,{title: '操作', align: "center", width: 300, templet: '#toolbar'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.eventList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            eventTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        // 工具栏监听
+        table.on('tool(tables)', function (obj) {
+            data.operator = obj.event
+            data.eventId = obj.data.id
+
+            layer.open({
+                type: 2,
+                area: ['1000px', '600px'],
+                content: './subPages/eventDetail.html'
+            })
+        })
+
+        $('#add').click(function () {
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加事件',
+                area: ['1000px', '700px'],
+                content: './subPages/addEvent.html'
+            })
+        })
+
+    })
+</script>
 </html>

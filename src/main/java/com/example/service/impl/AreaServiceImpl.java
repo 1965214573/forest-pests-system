@@ -129,7 +129,7 @@ public class AreaServiceImpl implements AreaService {
     public ResultInfo querySimpleArea() {
         try (SqlSession session = MybatisUtil.getSession()) {
             AreaMapper areaMapper = session.getMapper(AreaMapper.class);
-            List<Area> areaList = areaMapper.querySimpleAll();
+            List<AreaVO> areaList = areaMapper.querySimpleAll();
             Map<String, Object> data = new HashMap<>(1);
             data.put("areaList", areaList);
             return ResultInfo.builder()

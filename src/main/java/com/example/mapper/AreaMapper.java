@@ -65,5 +65,5 @@ public interface AreaMapper {
      * 查询所有区域信息
      * @return 区域列表
      */
-    List<Area> querySimpleAll();
+    List<AreaVO> querySimpleAll();
 }

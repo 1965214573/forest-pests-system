@@ -28,7 +28,7 @@ public class BaseServlet extends HttpServlet {
             ResultInfo invoke = (ResultInfo)method.invoke(this, req, resp);
             resp.getWriter().write(JSON.toJSONString(invoke));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            logger.debug(e.getMessage());
+            logger.error(e.getMessage(), e);
             resp.getWriter().write(JSON.toJSONString(ResultInfo.err()));
         }
     }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.EventMapper">
+    <insert id="insertOne">
+        insert into disaster_event
+(id, name, createDate, disasterStage, disasterDescribe, damage, exportAdvice, measure, pictureUrl, disasterType, discoveryType, areaId, smallClassId, influenceArea)
+values (
+        #{id},
+        #{name},
+        #{createDate},
+        #{disasterStage},
+        #{disasterDescribe},
+        #{damage},
+        #{exportAdvice},
+        #{measure},
+        #{pictureUrl},
+        #{disasterType},
+        #{discoveryType},
+        #{areaId},
+        #{smallClassId},
+        #{influenceArea}
+       )
+    </insert>
+    <select id="selectSimpleList" resultType="com.example.entities.VO.EventVO">
+        SELECT
+            disaster_event.id,
+            disaster_event.`name`,
+            disaster_event.createDate,
+            disaster_event.disasterStage,
+            disaster_event.measure,
+            disaster_area.`name` AS areaName
+        FROM
+            disaster_event
+                LEFT JOIN
+            disaster_area
+            ON
+                disaster_event.areaId = disaster_area.id
+        <where>
+            <if test="name != null and name != ''">and disaster_event.name like concat('%', #{name}, '%')</if>
+            <if test="disasterStage != null">and disasterStage = #{disasterStage}</if>
+            <if test="startDate != null">and createDate &gt;= #{startDate}</if>
+            <if test="endDate != null">and createDate &lt;= #{endDate}</if>
+        </where>
+        <if test="page != null">
+            limit #{page},#{limit}
+        </if>
+    </select>
+    <select id="countEvent" resultType="java.lang.Integer">
+        SELECT
+        count(*)
+        FROM
+        disaster_event
+        LEFT JOIN
+        disaster_area
+        ON
+        disaster_event.areaId = disaster_area.id
+        <where>
+            <if test="name != null and name != ''">and disaster_event.name like concat('%', #{name}, '%')</if>
+            <if test="disasterStage != null">and disasterStage = #{disasterStage}</if>
+            <if test="startDate != null">and createDate &gt;= #{startDate}</if>
+            <if test="endDate != null">and createDate &lt;= #{endDate}</if>
+        </where>
+    </select>
+</mapper>

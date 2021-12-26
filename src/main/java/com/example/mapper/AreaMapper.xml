@@ -93,7 +93,23 @@
                 area_landtype.id = disaster_area.landTypeId where
             classId is null
     </select>
-    <select id="querySimpleAll" resultType="com.example.entities.PO.Area">
-        select id, name from disaster_area
+    <select id="querySimpleAll" resultType="com.example.entities.VO.AreaVO">
+        SELECT
+            disaster_area.id,
+            disaster_area.`name`,
+            disaster_area.forestType,
+            area_landtype.landType,
+            disaster_area.dominantTree,
+            disaster_class.`name` AS className
+        FROM
+            disaster_area
+                LEFT JOIN
+            disaster_class
+            ON
+                disaster_area.classId = disaster_class.id
+                LEFT JOIN
+            area_landtype
+            ON
+                disaster_area.landTypeId = area_landtype.id
     </select>
 </mapper>

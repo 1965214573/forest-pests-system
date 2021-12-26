@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加小班页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-fluid" style="padding: 30px 60px">
+    <div class="layui-row">
+        <form class="layui-form" action="" onsubmit="return false" style="padding: 60px" lay-filter="eventDetail">
+            <div class="layui-col-md4 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="name">事件名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="createDate">发生时间：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="createDate" id="createDate"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="disasterStage">灾情阶段：</label>
+                    <div class="layui-input-block">
+                        <select name="disasterStage" id="disasterStage">
+                            <option value="1" selected>已得到控制</option>
+                            <option value="2">防治中</option>
+                            <option value="3">无法解决</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="disasterDescribe">灾情描述：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="disasterDescribe" id="disasterDescribe"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="disasterType">灾害类型：</label>
+                    <div class="layui-input-block">
+                        <select name="disasterType" id="disasterType">
+                            <option value="1" selected>虫害</option>
+                            <option value="2">病害</option>
+                            <option value="3">鼠害</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="damage">初步损失：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="damage" id="damage"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="measure">防治方案：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="measure" id="measure"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="exportAdvice">专家建议：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="exportAdvice" id="exportAdvice"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <span id="submit-view"></span>
+            </div>
+            <div class="layui-col-md4 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">灾区图片</label>
+                    <div class="layui-input-block">
+                        <div class="layui-btn layui-btn-warm layui-inline" id="upload">
+                            <i class="layui-icon">&#xe67c;</i>上传症状图片
+                        </div>
+                    </div>
+                    <div class="layui-input-block layui-hide">
+                        <input type="text" id="pictureUrl" name="pictureUrl">
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" id="disease-img"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="discoveryType">发现途径：</label>
+                    <div class="layui-input-block">
+                        <select name="discoveryType" id="discoveryType">
+                            <option value="1" selected>小班巡查发现</option>
+                            <option value="2">公众发现</option>
+                            <option value="3" selected>上级部门通报</option>
+                        </select>
+                    </div>
+                </div>
+                <span id="area-view"></span>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="className">所在小班:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="className" id="className" disabled class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="influenceArea">影响面积:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="influenceArea" id="influenceArea" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+</body>
+<script type="text/html" id="submit-btn">
+    <div class="layui-form-item" id="submit-box">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="area-select">
+    <div class="layui-form-item">
+        <label class="layui-form-label" for="areaId">发生位置:</label>
+        <div class="layui-input-block">
+            <select name="areaId" id="areaId" lay-filter="areaId">
+                {{# layui.each(d.areaList, function(index, item) { }}
+                <option value="{{ item.id}}">{{ item.name}}</option>
+                {{# })}}
+            </select>
+        </div>
+    </div>
+
+</script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl', 'layer', 'upload', 'laydate'], function () {
+        let area = layui.area
+        let clazz = layui.class
+        let form = layui.form
+        let laytpl = layui.laytpl
+        let layer = layui.layer
+        let upload = layui.upload
+        let laydate = layui.laydate
+        let events = layui.events
+        let $ = layui.$
+
+        let areaList
+
+        laydate.render({
+            elem: '#createDate',
+            type: 'date',
+            max: 0
+        })
+        // todo 渲染数据，根据父页面的id与操作进行确定
+        // 渲染地类下拉列表
+        area.getAllArea(function (res) {
+            areaList = res.data.areaList
+            if (res.code !== 200 || res.data.areaList.length === 0) {
+                let index = parent.layer.getFrameIndex(window.name)
+                parent.layer.close(index)
+
+                parent.layer.msg('暂无可管理的区域！请先添加区域信息')
+            }
+            laytpl($('#area-select').html()).render(res.data, function (html) {
+                $('#area-view').html(html)
+                form.val('eventDetail', {
+                    'className': areaList[0].className
+                })
+                form.render('select')
+            })
+        })
+
+
+        // 表单提交
+        form.on('submit(formDemo)', function (data) {
+            let formData = data.field
+            events.addEvent(formData, function (res) {
+                if (res.code === 200) {
+                    // 刷新页面
+                    parent.location.reload()
+                    // 关闭页面
+                    let index= parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+                // 弹出提示
+                parent.layer.msg(res.msg)
+            })
+            return false
+        })
+
+        // 动态改变小班信息
+        form.on('select(areaId)', function (data) {
+            let classInfo = areaList.filter(function (item) {
+                return item.id === data.value
+            })
+
+            form.val('eventDetail', {
+                'className': classInfo[0].className
+            })
+            form.render()
+        })
+
+        // 上传灾区图片
+        upload.render({
+            elem: '#upload',
+            acceptMime: 'image/*',
+            size: 1024 * 2,
+            url: '/FileUploadServlet',
+            choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                let files = obj.pushFile();
+                //预读本地文件，如果是多文件，则会遍历。
+                obj.preview(function(index, file, result){
+                    console.log(index)
+                    //图片插入到选择框中，
+                    $("#disease-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
+                });
+            },
+            done: function (res) {
+                $("#pictureUrl").val(res.data.src)
+            },
+            error: function(){
+                //请求异常回调
+            }
+        })
+
+
+    })
+</script>
+</html>

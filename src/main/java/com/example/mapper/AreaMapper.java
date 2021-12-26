@@ -52,5 +52,18 @@ public interface AreaMapper {
      * @param classId 小班id
      * @return 受影响的行数
      */
-    int BindClass(@Param("areaId") long areaId, @Param("classId") long classId);
+    int bindClass(@Param("areaId") long areaId, @Param("classId") long classId);
+
+    /**
+     * 解绑指定的班级信息
+     * @param clazzId 小班id
+     * @return 受影响的行数
+     */
+    int unBindClass(Long clazzId);
+
+    /**
+     * 查询所有区域信息
+     * @return 区域列表
+     */
+    List<Area> querySimpleAll();
 }

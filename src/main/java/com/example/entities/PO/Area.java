@@ -4,12 +4,14 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author youngoo
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Area {
     @JSONField(serializeUsing = ToStringSerializer.class)
     private Long id;

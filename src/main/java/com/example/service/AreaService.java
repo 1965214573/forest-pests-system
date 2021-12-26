@@ -33,4 +33,10 @@ public interface AreaService {
      * @return 统一查询结果
      */
     ResultInfo queryNoClassArea();
+
+    /**
+     * 查询所有区域
+     * @return 统一返回结果
+     */
+    ResultInfo querySimpleArea();
 }

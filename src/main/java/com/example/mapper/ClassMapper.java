@@ -36,4 +36,11 @@ public interface ClassMapper {
      * @return 小班列表
      */
     List<Clazz> querySimpleAll();
+
+    /**
+     * 更新小班信息
+     * @param clazz 小班对象
+     * @return 受影响的行数
+     */
+    int updateClass(Clazz clazz);
 }

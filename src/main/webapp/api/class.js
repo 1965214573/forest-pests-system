@@ -14,6 +14,13 @@ layui.define(['service'], function (exports) {
                 url: '/class/getClass',
                 success: func
             })
+        },
+        updateClass: function (data, func) {
+            service({
+                url: '/class/updateClass',
+                data: data,
+                success: func
+            })
         }
     }
 

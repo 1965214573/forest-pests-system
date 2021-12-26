@@ -35,7 +35,7 @@ public class ClassServiceImpl implements ClassService {
             ClassMapper classMapper = session.getMapper(ClassMapper.class);
             if (classMapper.insertOne(clazz) != 0) {
                 AreaMapper areaMapper = session.getMapper(AreaMapper.class);
-                if (areaMapper.BindClass(areaId, clazz.getId()) != 0) {
+                if (areaMapper.bindClass(areaId, clazz.getId()) != 0) {
                     session.commit();
                     return ResultInfo.ok();
                 }
@@ -95,6 +95,33 @@ public class ClassServiceImpl implements ClassService {
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return ResultInfo.err();
+    }
+
+    /**
+     * 更新小班信息，先修改小班信息，并清除之前区域的小班信息，再对对应的区域信息修改为当前小班
+     *
+     * @param clazz  小班信息对象
+     * @param areaId 区域id
+     * @return 统一返回对象
+     */
+    @Override
+    public ResultInfo updateClass(Clazz clazz, long areaId) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            ClassMapper classMapper = session.getMapper(ClassMapper.class);
+            if (classMapper.updateClass(clazz) != 0) {
+                AreaMapper areaMapper = session.getMapper(AreaMapper.class);
+                if (areaMapper.unBindClass(clazz.getId()) != 0) {
+                    if (areaMapper.bindClass(areaId, clazz.getId()) != 0) {
+                        session.commit();
+                        return ResultInfo.ok();
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            logger.error("数据库操作异常", e);
         }
         return ResultInfo.err();
     }

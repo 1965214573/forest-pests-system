@@ -21,6 +21,13 @@ layui.define(['service'], function (exports) {
                 url: '/area/getNoClassArea',
                 success: func
             })
+        },
+        getAllArea: function (func) {
+            service({
+                url: '/area/getAllArea',
+                success: func
+            })
+
         }
     }
 

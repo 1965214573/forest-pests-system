@@ -71,9 +71,10 @@
         area.getNoClassAreaList(function (res) {
             console.log(res)
             if (res.code !== 200 || res.data.areaList.length === 0) {
-                // 将添加设为禁用
-                $('#add').hide()
-                layer.msg('暂无可管理的区域！')
+                let index = parent.layer.getFrameIndex(window.name)
+                parent.layer.close(index)
+
+                parent.layer.msg('暂无可管理的区域！请先添加区域信息')
             }
             laytpl($('#landTypeList').html()).render(res.data, function (html) {
                 $('#view').html(html)
@@ -90,11 +91,11 @@
                     // 刷新页面
                     parent.location.reload()
                     // 关闭页面
-                    let index= parent.layer.getFrameIndex(Window.name);
+                    let index= parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                 }
                 // 弹出提示
-                layer.msg(res.msg)
+                parent.layer.msg(res.msg)
             })
             return false
         })

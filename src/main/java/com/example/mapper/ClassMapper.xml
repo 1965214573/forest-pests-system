@@ -5,6 +5,16 @@
         insert into disaster_class (id, name, principal, phone, peopleCount, createDate)
         VALUES (#{id}, #{name}, #{principal}, #{phone}, #{peopleCount}, #{createDate})
     </insert>
+    <update id="updateClass">
+        update disaster_class
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="principal != null and principal != ''">principal = #{principal},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="peopleCount != null">peopleCount = #{peopleCount}</if>
+        </set>
+        where id = #{id}
+    </update>
     <resultMap id="ClassVOMap" type="com.example.entities.VO.ClassVO">
         <id property="id" column="classId"/>
         <result property="name" column="className"/>

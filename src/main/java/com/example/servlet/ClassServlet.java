@@ -46,4 +46,18 @@ public class ClassServlet extends BaseServlet{
         ClassService classService = new ClassServiceImpl();
         return classService.querySimpleList();
     }
+
+    public ResultInfo updateClass(HttpServletRequest request, HttpServletResponse response) {
+        // 处理参数
+        String id = request.getParameter("id");
+        String className = request.getParameter("className");
+        String principal = request.getParameter("principal");
+        String phone = request.getParameter("phone");
+        String peopleCount = request.getParameter("peopleCount");
+        String areaId = request.getParameter("areaId");
+
+        Clazz clazz = new Clazz(Long.parseLong(id), className, principal, phone, Integer.parseInt(peopleCount), null);
+        ClassService classService = new ClassServiceImpl();
+        return classService.updateClass(clazz, Long.parseLong(areaId));
+    }
 }

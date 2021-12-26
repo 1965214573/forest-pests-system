@@ -28,4 +28,12 @@ public interface ClassService {
      * @return 统一结果对象
      */
     ResultInfo querySimpleList();
+
+    /**
+     * 更新小班信息，先修改小班信息，再对对应的区域信息修改为当前小班
+     * @param clazz 小班信息对象
+     * @param areaId 区域id
+     * @return 统一返回对象
+     */
+    ResultInfo updateClass(Clazz clazz, long areaId);
 }

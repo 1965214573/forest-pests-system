@@ -21,11 +21,7 @@
             <div class="layui-input-inline">
                 <input type="text" name="className" id="className" autocomplete="off" placeholder="输入区域名称" class="layui-input">
             </div>
-            <label class="layui-form-label" for="areaId">负责区域：</label>
-            <!--todo 动态加载小班信息-->
-            <div class="layui-input-inline">
-                <input type="text" name="areaId" id="areaId" autocomplete="off" placeholder="输入区域" class="layui-input">
-            </div>
+            <span id="area-view"></span>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
             </div>
@@ -38,9 +34,18 @@
         <table class="box" id="class-table" lay-filter="tables"></table>
     </div>
 </div>
-
-
 </body>
+
+<script type="text/html" id="area-select">
+    <label class="layui-form-label" for="areaId">负责区域：</label>
+    <div class="layui-input-inline">
+        <select name="areaId" id="areaId">
+            {{# layui.each(d.areaList, function(index,item){ }}
+            <option value="{{ item.id}}">{{ item.name}}</option>
+            {{# }) }}
+        </select>
+    </div>
+</script>
 
 <!--工具条-->
 <script type="text/html" id="toolbar">
@@ -54,12 +59,24 @@
         base: '../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['table', 'form', 'layer', 'element', 'request'], function () {
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
+        let laytpl = layui.laytpl
         let clazz = layui.class
+        let area = layui.area
         let $ = layui.$
+
+        // 搜索框渲染
+        area.getAllArea(function (res) {
+            if (res.code === 200 && res.data.areaList.length !== 0) {
+                laytpl($('#area-select').html()).render(res.data, function (html) {
+                    $('#area-view').html(html)
+                    form.render('select')
+                })
+            }
+        })
 
         // 表格数据渲染
         let classTable = table.render({

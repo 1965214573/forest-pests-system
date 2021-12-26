@@ -119,4 +119,27 @@ public class AreaServiceImpl implements AreaService {
         }
         return ResultInfo.err();
     }
+
+    /**
+     * 查询所有区域
+     *
+     * @return 统一返回结果
+     */
+    @Override
+    public ResultInfo querySimpleArea() {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            AreaMapper areaMapper = session.getMapper(AreaMapper.class);
+            List<Area> areaList = areaMapper.querySimpleAll();
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("areaList", areaList);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("区域列表")
+                    .data(data)
+                    .build();
+        } catch (Exception e) {
+            logger.error("数据库操作异常", e);
+        }
+        return ResultInfo.err();
+    }
 }

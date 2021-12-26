@@ -21,7 +21,7 @@
         <h2>森林病虫害系统</h2>
         <p>基于servlet、mybatis的前后端分离系统</p>
       </div>
-      <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+      <div class="layadmin-user-login-box layadmin-user-login-body layui-form" lay-filter="login-data">
         <div class="layui-form-item">
           <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-username"></label>
           <input type="text" name="username" id="LAY-user-login-username" lay-verify="required" placeholder="用户名" class="layui-input">
@@ -88,6 +88,11 @@
     let form = layui.form
     let user = layui.user
     let $ = layui.$;
+
+    form.val('login-data', {
+      'username': 'admin',
+      'password': '123'
+    })
 
     form.on('submit(LAY-user-login-submit)', function (data) {
 

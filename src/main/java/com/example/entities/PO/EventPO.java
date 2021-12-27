@@ -23,7 +23,7 @@ public class EventPO {
     @JSONField(ordinal = 2,format = "yyyy-MM-dd")
     private LocalDate createDate;
     @JSONField(ordinal = 3)
-    private int disasterStage;
+    private Integer disasterStage;
     @JSONField(ordinal = 4)
     private String disasterDescribe;
     @JSONField(ordinal = 5)
@@ -35,13 +35,14 @@ public class EventPO {
     @JSONField(ordinal = 8)
     private String pictureUrl;
     @JSONField(ordinal = 9)
-    private int disasterType;
+    private Integer disasterType;
     @JSONField(ordinal = 10)
-    private int discoveryType;
+    private Integer discoveryType;
     @JSONField(ordinal = 11, serializeUsing = ToStringSerializer.class)
     private Long areaId;
     @JSONField(ordinal = 12, serializeUsing = ToStringSerializer.class)
     private Long smallClassId;
     @JSONField(ordinal = 13)
     private String influenceArea;
+    private Integer status;
 }

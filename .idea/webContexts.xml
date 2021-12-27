@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/pages/disaster/subPages/addArea.html" value="file://$PROJECT_DIR$/src/main/webapp/pages/disaster/subPages" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/pages/disaster/subPages/addEvent.html" value="file://$PROJECT_DIR$/src/main/webapp/pages/disaster/subPages" />
       </map>
     </option>
   </component>

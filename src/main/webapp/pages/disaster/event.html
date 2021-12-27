@@ -77,7 +77,9 @@
 <script type="text/html" id="toolbar">
     <a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    {{# if (d.status == 0) { }}
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="profession">申请专家会商</a>
+    {{# } }}
 </script>
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -93,6 +95,7 @@
         let area = layui.area
         let laytpl = layui.laytpl
         let laydate = layui.laydate
+        let events = layui.events
         let $ = layui.$
 
         // 获取小班信息，如果有，进行渲染
@@ -158,12 +161,21 @@
         table.on('tool(tables)', function (obj) {
             data.operator = obj.event
             data.eventId = obj.data.id
-
-            layer.open({
-                type: 2,
-                area: ['1000px', '600px'],
-                content: './subPages/eventDetail.html'
-            })
+            if (obj.event === 'profession') {
+                // 更改会商状态
+                events.governingEvent({id: obj.data.id}, function (res) {
+                    if (res.code === 200) {
+                        window.location.reload()
+                    }
+                    layer.msg(res.msg)
+                })
+            } else {
+                layer.open({
+                    type: 2,
+                    area: ['1000px', '700px'],
+                    content: './subPages/eventDetail.html'
+                })
+            }
         })
 
         $('#add').click(function () {

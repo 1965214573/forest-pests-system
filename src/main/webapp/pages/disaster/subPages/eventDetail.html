@@ -25,7 +25,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label" for="disasterStage">灾情阶段：</label>
                     <div class="layui-input-block">
-                        <select name="disasterStage" id="disasterStage">
+                        <select name="disasterStage" id="disasterStage" class="layui-select">
                             <option value="1" selected>已得到控制</option>
                             <option value="2">防治中</option>
                             <option value="3">无法解决</option>
@@ -41,7 +41,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label" for="disasterType">灾害类型：</label>
                     <div class="layui-input-block">
-                        <select name="disasterType" id="disasterType">
+                        <select name="disasterType" id="disasterType" class="layui-select">
                             <option value="1" selected>虫害</option>
                             <option value="2">病害</option>
                             <option value="3">鼠害</option>
@@ -87,7 +87,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label" for="discoveryType">发现途径：</label>
                     <div class="layui-input-block">
-                        <select name="discoveryType" id="discoveryType">
+                        <select name="discoveryType" id="discoveryType" class="layui-select">
                             <option value="1" selected>小班巡查发现</option>
                             <option value="2">公众发现</option>
                             <option value="3" selected>上级部门通报</option>
@@ -125,7 +125,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label" for="areaId">发生位置:</label>
         <div class="layui-input-block">
-            <select name="areaId" id="areaId" lay-filter="areaId">
+            <select name="areaId" id="areaId" lay-filter="areaId" class="layui-select">
                 {{# layui.each(d.areaList, function(index, item) { }}
                 <option value="{{ item.id}}">{{ item.name}}</option>
                 {{# })}}
@@ -159,29 +159,84 @@
             max: 0
         })
         // todo 渲染数据，根据父页面的id与操作进行确定
-        // 渲染地类下拉列表
-        area.getAllArea(function (res) {
-            areaList = res.data.areaList
-            if (res.code !== 200 || res.data.areaList.length === 0) {
-                let index = parent.layer.getFrameIndex(window.name)
-                parent.layer.close(index)
+        let dataInfo = parent.data
 
-                parent.layer.msg('暂无可管理的区域！请先添加区域信息')
-            }
-            laytpl($('#area-select').html()).render(res.data, function (html) {
-                $('#area-view').html(html)
+
+        // 根据事件id获取事件详情
+        events.getEventById({id: dataInfo.eventId}, function (res) {
+            if (res.code === 200) {
+                let eventInfo = res.data.eventInfo
+                console.log(eventInfo)
+                // 对form表单进行渲染
                 form.val('eventDetail', {
-                    'className': areaList[0].className
+                    'name': eventInfo.name,
+                    'createDate': eventInfo.createDate,
+                    'disasterStage': eventInfo.disasterStage,
+                    'disasterDescribe': eventInfo.disasterDescribe,
+                    'disasterType': eventInfo.disasterType,
+                    'damage': eventInfo.damage,
+                    'measure': eventInfo.measure,
+                    'exportAdvice': eventInfo.exportAdvice,
+                    'pictureUrl': eventInfo.pictureUrl,
+                    'discoveryType': eventInfo.discoveryType,
+                    'areaId': eventInfo.area.id,
+                    'className': eventInfo.area.name,
+                    'influenceArea': eventInfo.influenceArea
                 })
-                form.render('select')
-            })
+                let areas = {areaList: []}
+                areas.areaList.push(res.data.eventInfo.area)
+
+                laytpl($('#area-select').html()).render(areas, function (html) {
+                    $('#area-view').html(html)
+
+                    if (dataInfo.operator === 'detail') {
+                        $('.layui-select').attr('disabled', 'disabled')
+                    }
+                    form.render('select')
+                })
+                // 渲染图片
+                $("#disease-img").html("<img style='object-fit:cover' src = '/" + eventInfo.pictureUrl + "' height='100px;' />")
+            }
         })
 
+
+
+
+        if (dataInfo.operator === 'edit') {
+            // 渲染地类下拉列表
+            area.getAllArea(function (res) {
+                areaList = res.data.areaList
+                if (res.code !== 200 || res.data.areaList.length === 0) {
+                    let index = parent.layer.getFrameIndex(window.name)
+                    parent.layer.close(index)
+
+                    parent.layer.msg('暂无可管理的区域！请先添加区域信息')
+                }
+                laytpl($('#area-select').html()).render(res.data, function (html) {
+                    $('#area-view').html(html)
+                    form.val('eventDetail', {
+                        'className': areaList[0].className
+                    })
+                    if (dataInfo.operator === 'detail') {
+                        $('.layui-select').attr('disabled', 'disabled')
+                    }
+                    form.render('select')
+                })
+            })
+
+            // 添加修改按钮
+            $('#submit-view').html($('#submit-btn').html())
+        } else if (dataInfo.operator === 'detail') {
+            $('.layui-input').attr('disabled', 'disabled')
+            $('.layui-select').attr('disabled', 'disabled')
+            $('#upload').hide()
+        }
 
         // 表单提交
         form.on('submit(formDemo)', function (data) {
             let formData = data.field
-            events.addEvent(formData, function (res) {
+            formData.id = dataInfo.eventId
+            events.updateEvent(formData, function (res) {
                 if (res.code === 200) {
                     // 刷新页面
                     parent.location.reload()

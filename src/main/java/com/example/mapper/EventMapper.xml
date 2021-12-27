@@ -3,38 +3,57 @@
 <mapper namespace="com.example.mapper.EventMapper">
     <insert id="insertOne">
         insert into disaster_event
-(id, name, createDate, disasterStage, disasterDescribe, damage, exportAdvice, measure, pictureUrl, disasterType, discoveryType, areaId, smallClassId, influenceArea)
-values (
-        #{id},
-        #{name},
-        #{createDate},
-        #{disasterStage},
-        #{disasterDescribe},
-        #{damage},
-        #{exportAdvice},
-        #{measure},
-        #{pictureUrl},
-        #{disasterType},
-        #{discoveryType},
-        #{areaId},
-        #{smallClassId},
-        #{influenceArea}
-       )
+        (id, name, createDate, disasterStage, disasterDescribe, damage, exportAdvice, measure, pictureUrl, disasterType,
+         discoveryType, areaId, smallClassId, influenceArea)
+        values (#{id},
+                #{name},
+                #{createDate},
+                #{disasterStage},
+                #{disasterDescribe},
+                #{damage},
+                #{exportAdvice},
+                #{measure},
+                #{pictureUrl},
+                #{disasterType},
+                #{discoveryType},
+                #{areaId},
+                #{smallClassId},
+                #{influenceArea})
     </insert>
-    <select id="selectSimpleList" resultType="com.example.entities.VO.EventVO">
+    <update id="updateEvent">
+        update disaster_event
+        set name             = #{name},
+            createDate       = #{createDate},
+            disasterStage    = #{disasterStage},
+            disasterDescribe = #{disasterDescribe},
+            damage           = #{damage},
+            exportAdvice     = #{exportAdvice},
+            measure          = #{measure},
+            pictureUrl       = #{pictureUrl},
+            disasterType     = #{disasterType},
+            discoveryType    = #{discoveryType},
+            areaId           = #{areaId},
+            influenceArea    = #{influenceArea}
+        where disaster_event.id = #{id}
+    </update>
+    <update id="governingEvent">
+        update disaster_event set status = 1 where id = #{eventId}
+    </update>
+    <select id="selectSimpleList" resultType="com.example.entities.VO.EventSimpleVO">
         SELECT
-            disaster_event.id,
-            disaster_event.`name`,
-            disaster_event.createDate,
-            disaster_event.disasterStage,
-            disaster_event.measure,
-            disaster_area.`name` AS areaName
+        disaster_event.id,
+        disaster_event.`name`,
+        disaster_event.createDate,
+        disaster_event.disasterStage,
+        disaster_event.measure,
+        disaster_area.`name` AS areaName,
+        disaster_event.status
         FROM
-            disaster_event
-                LEFT JOIN
-            disaster_area
-            ON
-                disaster_event.areaId = disaster_area.id
+        disaster_event
+        LEFT JOIN
+        disaster_area
+        ON
+        disaster_event.areaId = disaster_area.id
         <where>
             <if test="name != null and name != ''">and disaster_event.name like concat('%', #{name}, '%')</if>
             <if test="disasterStage != null">and disasterStage = #{disasterStage}</if>
@@ -60,5 +79,103 @@ values (
             <if test="startDate != null">and createDate &gt;= #{startDate}</if>
             <if test="endDate != null">and createDate &lt;= #{endDate}</if>
         </where>
+    </select>
+    <resultMap id="EventVOMap" type="com.example.entities.VO.EventVO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="createDate" column="createDate"/>
+        <result property="disasterStage" column="disasterStage"/>
+        <result property="disasterDescribe" column="disasterDescribe"/>
+        <result property="damage" column="damage"/>
+        <result property="exportAdvice" column="exportAdvice"/>
+        <result property="measure" column="measure"/>
+        <result property="pictureUrl" column="pictureUrl"/>
+        <result property="disasterType" column="disasterType"/>
+        <result property="discoveryType" column="discoveryType"/>
+        <result property="smallClassId" column="smallClassId"/>
+        <result property="influenceArea" column="influenceArea"/>
+        <result property="status" column="status"/>
+        <association property="area" javaType="com.example.entities.PO.Area">
+            <id property="id" column="areaId"/>
+            <result property="name" column="areaName"/>
+            <result property="dominantTree" column="dominantTree"/>
+            <result property="landType" column="landType"/>
+            <result property="forestType" column="forestType"/>
+        </association>
+    </resultMap>
+    <select id="queryById" resultMap="EventVOMap">
+        SELECT disaster_event.id,
+               disaster_event.`name`,
+               disaster_event.createDate,
+               disaster_event.disasterStage,
+               disaster_event.disasterDescribe,
+               disaster_event.damage,
+               disaster_event.exportAdvice,
+               disaster_event.measure,
+               disaster_event.pictureUrl,
+               disaster_event.disasterType,
+               disaster_event.discoveryType,
+               disaster_event.influenceArea,
+               disaster_event.status,
+               disaster_area.id      AS areaId,
+               disaster_area.`name`  AS areaName,
+               disaster_area.forestType,
+               area_landtype.landType,
+               disaster_area.dominantTree,
+               disaster_area.classId AS smallClassId
+        FROM disaster_area
+                 LEFT JOIN
+             area_landtype
+             ON
+                 disaster_area.landTypeId = area_landtype.id
+                 RIGHT JOIN
+             disaster_event
+             ON
+                 disaster_event.areaId = disaster_area.id
+        where disaster_event.id = #{eventId}
+    </select>
+    <select id="queryGoverningList" resultMap="EventVOMap">
+        SELECT disaster_event.id,
+               disaster_event.`name`,
+               disaster_event.createDate,
+               disaster_event.disasterStage,
+               disaster_event.disasterDescribe,
+               disaster_event.damage,
+               disaster_event.exportAdvice,
+               disaster_event.measure,
+               disaster_event.pictureUrl,
+               disaster_event.disasterType,
+               disaster_event.discoveryType,
+               disaster_event.influenceArea,
+               disaster_area.id      AS areaId,
+               disaster_area.`name`  AS areaName,
+               disaster_area.forestType,
+               area_landtype.landType,
+               disaster_area.dominantTree,
+               disaster_area.classId AS smallClassId
+        FROM disaster_area
+                 LEFT JOIN
+             area_landtype
+             ON
+                 disaster_area.landTypeId = area_landtype.id
+                 RIGHT JOIN
+             disaster_event
+             ON
+                 disaster_event.areaId = disaster_area.id
+        WHERE disaster_event.`status` = 1
+        limit #{page}, #{limit}
+    </select>
+    <select id="countGoverning" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM disaster_area
+                 LEFT JOIN
+             area_landtype
+             ON
+                 disaster_area.landTypeId = area_landtype.id
+                 RIGHT JOIN
+             disaster_event
+             ON
+                 disaster_event.areaId = disaster_area.id
+        WHERE disaster_event.`status` = 1
     </select>
 </mapper>

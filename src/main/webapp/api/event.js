@@ -8,6 +8,30 @@ layui.define(['service'], function (exports) {
                 data: data,
                 success: func
             })
+        },
+        getEventById: function (data, func) {
+            service({
+                url: '/event/getEventById',
+                data: data,
+                type: 'post',
+                success: func
+            })
+        },
+        updateEvent: function (data, func) {
+            service({
+                url: '/event/updateEvent',
+                data: data,
+                type: 'post',
+                success: func
+            })
+        },
+        governingEvent: function (data, func) {
+            service({
+                url: '/event/governingEvent',
+                data: data,
+                type: 'post',
+                success: func
+            })
         }
     }
 

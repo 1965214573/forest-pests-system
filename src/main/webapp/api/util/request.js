@@ -7,8 +7,9 @@ layui.extend({
     disease: 'disease',
     mouse: 'mouse',
     pest: 'pest',
-    events: 'event'
-}).define(['setting', 'service', 'user', 'area', 'class', 'disease', 'mouse', 'pest', 'events'], function(exports){
+    events: 'event',
+    profession: 'profession'
+}).define(['setting', 'service', 'user', 'area', 'class', 'disease', 'mouse', 'pest', 'events', 'profession'], function(exports){
     //输出 request 接口
     exports('request');
 });

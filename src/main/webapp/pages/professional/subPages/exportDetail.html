@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家子页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-fluid" style="padding: 30px 60px">
+    <div class="layui-row">
+        <form class="layui-form" action="" onsubmit="return false" style="padding: 60px" lay-filter="exportDetail">
+            <div class="layui-col-md4 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="name">专家姓名：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">专家图片</label>
+                    <div class="layui-input-block">
+                        <div class="layui-btn layui-btn-warm layui-inline" id="upload">
+                            <i class="layui-icon">&#xe67c;</i>上传图片
+                        </div>
+                    </div>
+                    <div class="layui-input-block layui-hide">
+                        <input type="text" id="pictureUrl" name="pictureUrl">
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" id="export-img"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="job">职务：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="job" id="job"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="organization">工作单位：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="organization" id="organization"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="email">邮箱：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" id="email"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-col-md4 layui-col-md-offset1">
+
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="sex">专家性别：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" id="sex" value="1" title="男" checked>
+                        <input type="radio" name="sex" value="2" title="女">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="birthday">出生年月:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="birthday" id="birthday" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="speciality">专长:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="speciality" id="speciality" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="phone">电话:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" id="phone" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="location">通讯地址:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="location" id="location" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <span id="submit-view"></span>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+</body>
+<script type="text/html" id="submit-btn">
+    <div class="layui-form-item" id="submit-box">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit-btn-text">添加</button>
+        </div>
+    </div>
+</script>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl', 'layer', 'upload', 'laydate', 'profession'], function () {
+        let form = layui.form
+        let upload = layui.upload
+        let laydate = layui.laydate
+        let profession = layui.profession
+        let $ = layui.$
+
+        let areaList
+
+        laydate.render({
+            elem: '#birthday',
+            type: 'date',
+            max: 0
+        })
+        // todo 渲染数据，根据父页面的id与操作进行确定
+        let dataInfo = parent.rowData
+        if (dataInfo.operator !== 'add') {
+            // 渲染表格数据
+            form.val('exportDetail', {
+                'name': dataInfo.name,
+                'pictureUrl': dataInfo.pictureUrl,
+                'job': dataInfo.job,
+                'organization': dataInfo.organization,
+                'email': dataInfo.email,
+                'sex': dataInfo.sex,
+                'birthday': dataInfo.birthday,
+                'speciality': dataInfo.speciality,
+                'phone': dataInfo.phone,
+                'location': dataInfo.location
+            })
+            // 渲染图片
+            $('#export-img').html("<img style='object-fit:cover' src = '/"+dataInfo.pictureUrl+"' height='100px;' />")
+
+
+        }
+
+        if (dataInfo.operator === 'edit' || dataInfo.operator === 'add') {
+            // 添加修改按钮
+            $('#submit-view').html($('#submit-btn').html())
+            if (dataInfo.operator === 'edit') {
+                $('#submit-btn-text').text('编辑')
+            } else {
+                $('#submit-btn-text').text('添加')
+            }
+        } else if (dataInfo.operator === 'detail') {
+            $('.layui-input').attr('disabled', 'disabled')
+            $('.layui-select').attr('disabled', 'disabled')
+            $('#upload').hide()
+        }
+
+        // 表单提交
+        form.on('submit(formDemo)', function (data) {
+            let formData = data.field
+            if (dataInfo.operator === 'add') {
+                profession.addExport(formData, function (res) {
+                    if (res.code === 200) {
+                        // 刷新页面
+                        parent.location.reload()
+                        // 关闭页面
+                        let index= parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                    // 弹出提示
+                    parent.layer.msg(res.msg)
+                })
+            } else if (dataInfo.operator === 'edit') {
+                formData.id = dataInfo.id
+                profession.updateExport(formData, function (res) {
+                    if (res.code === 200) {
+                        // 刷新页面
+                        parent.location.reload()
+                        // 关闭页面
+                        let index= parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }
+                    // 弹出提示
+                    parent.layer.msg(res.msg)
+                })
+            }
+            return false
+        })
+
+        // 动态改变小班信息
+        form.on('select(areaId)', function (data) {
+            let classInfo = areaList.filter(function (item) {
+                return item.id === data.value
+            })
+
+            form.val('eventDetail', {
+                'className': classInfo[0].className
+            })
+            form.render()
+        })
+
+        // 上传灾区图片
+        upload.render({
+            elem: '#upload',
+            acceptMime: 'image/*',
+            size: 1024 * 2,
+            url: '/FileUploadServlet',
+            choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                let files = obj.pushFile();
+                //预读本地文件，如果是多文件，则会遍历。
+                obj.preview(function(index, file, result){
+                    console.log(index)
+                    //图片插入到选择框中，
+                    $("#export-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
+                });
+            },
+            done: function (res) {
+                $("#pictureUrl").val(res.data.src)
+            },
+            error: function(){
+                //请求异常回调
+            }
+        })
+
+
+    })
+</script>
+</html>

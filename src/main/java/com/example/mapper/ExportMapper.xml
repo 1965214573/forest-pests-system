@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mapper.ExportMapper">
+    <insert id="insertOne">
+        insert into profession_export (id, name, sex, pictureUrl, birthday, speciality, job, organization, email, phone,
+                                       location)
+        VALUES (#{id}, #{name}, #{sex}, #{pictureUrl}, #{birthday}, #{speciality}, #{job}, #{organization}, #{email},
+                #{phone}, #{location})
+    </insert>
+    <update id="updateExport">
+        update profession_export
+        set name         = #{name},
+            sex          = #{sex},
+            pictureUrl   = #{pictureUrl},
+            birthday     = #{birthday},
+            speciality   = #{speciality},
+            job          = #{job},
+            organization = #{organization},
+            email        = #{email},
+            phone        = #{phone},
+            location     = #{location}
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        delete from profession_export where id = #{id}
+    </delete>
+    <select id="selectAll" resultType="com.example.entities.PO.Export">
+        select id, name, sex, pictureUrl, birthday, speciality, job, organization, email, phone, location from
+        profession_export
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name},'%')
+            </if>
+            <if test="speciality != null and speciality != ''">
+                and speciality like concat('%', #{speciality},'%')
+            </if>
+            <if test="organization != null and organization != ''">
+                and organization like concat('%', #{organization},'%')
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countAll" resultType="java.lang.Integer">
+        select count(*) from profession_export
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name},'%')
+            </if>
+            <if test="speciality != null and speciality != ''">
+                and speciality like concat('%', #{speciality},'%')
+            </if>
+            <if test="organization != null and organization != ''">
+                and organization like concat('%', #{organization},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

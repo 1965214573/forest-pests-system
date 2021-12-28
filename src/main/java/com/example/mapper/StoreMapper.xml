@@ -11,8 +11,8 @@
     </insert>
     <insert id="batchSaveRecordDetail" parameterType="java.util.List">
         insert into storemanage_record_detail (id, recordId, drugOrDeviceId, outletNumber) VALUES
-        <foreach collection="details" index="index" separator=",">
-            (#{details.id}, #{details.recordId}, #{details.drugOrDeviceId}, #{details.outletNumber})
+        <foreach collection="details" item="item" index="index" separator=",">
+            (#{item.id}, #{item.recordId}, #{item.drugOrDeviceId}, #{item.outletNumber})
         </foreach>
     </insert>
     <select id="countDeviceDrug" resultType="java.lang.Integer">

@@ -98,6 +98,8 @@ public class StoreServlet extends BaseServlet{
             details.add(new RecordDetail(SnowIdUtils.uniqueLong(), id, jsonObject.getLong("id"), jsonObject.getInteger("count")));
         }
         StoreService storeService = new StoreServiceImpl();
+        System.out.println(record);
+        details.forEach(System.out::println);
         return storeService.addOutletDetail(record, details);
     }
 }

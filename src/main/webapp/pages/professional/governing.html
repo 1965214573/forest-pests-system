@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
     <style>
         .box {
-            margin-top: 20px;
             margin-left: 10px;
             background-color: white;
             padding-top: 40px;
@@ -79,28 +78,7 @@
             }
         });
 
-        //监听提交
-        form.on('submit(queryCondition)', function(data){
-            exportTable.reload({
-                where: data.field,
-                page: {
-                    curr: 1
-                }
-            })
-            return false;
-        });
 
-        // 添加专家功能
-        $('#add').click(function () {
-            rowData.operator = 'add'
-            // 打开一个新增页面
-            layer.open({
-                type: 2,
-                title: '添加专家',
-                area: ['1000px', '600px'],
-                content: './subPages/exportDetail.html'
-            })
-        })
 
         table.on('tool(tables)', function (obj) {
             rowData = obj.data
@@ -128,9 +106,9 @@
             } else {
                 layer.open({
                     type: 2,
-                    title: (layEvent === 'edit' ? '编辑' : '查看') +'小班信息',
-                    area: ['1000px', '600px'],
-                    content: './subPages/exportDetail.html'
+                    title: '会商灾情',
+                    area: ['1200px', '700px'],
+                    content: './subPages/governingDetail.html'
                 })
             }
         })

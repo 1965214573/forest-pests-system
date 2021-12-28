@@ -20,6 +20,10 @@
                 #{smallClassId},
                 #{influenceArea})
     </insert>
+    <insert id="insertGoverningResult">
+        insert into profession_detail (id, eventId, exportList, result, createDate) VALUES
+        (#{id}, #{eventId}, #{exportList}, #{result}, #{createDate})
+    </insert>
     <update id="updateEvent">
         update disaster_event
         set name             = #{name},
@@ -177,5 +181,9 @@
              ON
                  disaster_event.areaId = disaster_area.id
         WHERE disaster_event.`status` = 1
+    </select>
+    <select id="queryGoverningDetailByEventId" resultType="com.example.entities.PO.GoverningDetail">
+        select id, eventId, exportList, result, createDate from profession_detail
+        where eventId = #{eventId}
     </select>
 </mapper>

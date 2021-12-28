@@ -24,6 +24,12 @@ layui.define(['service'], function (exports) {
                 data: data,
                 success: func
             })
+        },
+        getExportList: function (func) {
+            service({
+                url: '/export/getExportList',
+                success: func
+            })
         }
     }
 

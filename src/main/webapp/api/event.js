@@ -32,6 +32,14 @@ layui.define(['service'], function (exports) {
                 type: 'post',
                 success: func
             })
+        },
+        addGoverningDetail: function (data, func) {
+            service({
+                url: '/event/addGoverningDetail',
+                type: 'post',
+                data: data,
+                success: func
+            })
         }
     }
 

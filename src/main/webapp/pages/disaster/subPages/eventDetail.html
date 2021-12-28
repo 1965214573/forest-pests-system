@@ -112,6 +112,7 @@
 
 
     </div>
+    <table id="detail-table"></table>
 </div>
 </body>
 <script type="text/html" id="submit-btn">
@@ -140,15 +141,14 @@
         base: '../../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['request', 'form', 'laytpl', 'layer', 'upload', 'laydate'], function () {
+    }).use(['request', 'form', 'laytpl', 'layer', 'upload', 'laydate', 'table'], function () {
         let area = layui.area
-        let clazz = layui.class
         let form = layui.form
         let laytpl = layui.laytpl
-        let layer = layui.layer
         let upload = layui.upload
         let laydate = layui.laydate
         let events = layui.events
+        let table = layui.table
         let $ = layui.$
 
         let areaList
@@ -161,7 +161,29 @@
         // todo 渲染数据，根据父页面的id与操作进行确定
         let dataInfo = parent.data
 
-
+        let detailTable = table.render({
+            elem: '#detail-table'
+            ,url: '/event/getGoverningDetail'//数据接口
+            ,cols: [[ //表头
+                {field: 'createDate', title: '日期', align: 'center'}
+                ,{field: 'exportList', title: '会商人员', align: 'center'}
+                ,{field: 'result', title: '会商结果', align: 'center'}
+            ]]
+            ,where: {
+                eventId: dataInfo.eventId
+            }
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.governingList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
         // 根据事件id获取事件详情
         events.getEventById({id: dataInfo.eventId}, function (res) {
             if (res.code === 200) {

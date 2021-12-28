@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entities.PO.EventPO;
+import com.example.entities.PO.GoverningDetail;
 import com.example.entities.Query.QueryEvent;
 import com.example.utils.ResultInfo;
 
@@ -50,4 +51,18 @@ public interface EventService {
      * @return 统一返回对象
      */
     ResultInfo governingEvent(long eventId);
+
+    /**
+     * 添加事件的会商结果
+     * @param governingDetail 会商结果对象
+     * @return 统一返回对象
+     */
+    ResultInfo addGoverningResult(GoverningDetail governingDetail);
+
+    /**
+     * 查询事件的会商记录
+     * @param eventId 事件id
+     * @return 统一返回对象
+     */
+    ResultInfo getGoverningListByEventId(long eventId);
 }

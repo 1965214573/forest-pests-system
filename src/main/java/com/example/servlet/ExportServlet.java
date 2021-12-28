@@ -29,7 +29,7 @@ public class ExportServlet extends BaseServlet{
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");
 
-        QueryExport queryExport = new QueryExport(name, speciality, organization, (Integer.parseInt(page) - 1) * Integer.parseInt(limit), Integer.parseInt(limit));
+        QueryExport queryExport = new QueryExport(name, speciality, organization, page == null ? null : (Integer.parseInt(page) - 1) * Integer.parseInt(limit), limit == null ? null : Integer.parseInt(limit));
         ExportService exportService = new ExportServiceImpl();
         return exportService.queryAll(queryExport);
     }

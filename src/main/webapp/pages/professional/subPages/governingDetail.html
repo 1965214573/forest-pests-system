@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专家会商详情页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-fluid" style="padding: 30px 60px">
+    <div class="layui-row">
+        <form class="layui-form" action="" onsubmit="return false" style="padding: 60px" lay-filter="eventDetail">
+            <div class="layui-col-md5 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="name">事件名称：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="areaName">发生区域：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="areaName" id="areaName"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="influenceArea">影响面积：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="influenceArea" id="influenceArea"  lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+            </div>
+            <div class="layui-col-md5 layui-col-md-offset1">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="createDate">发生时间:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="createDate" id="createDate" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="disasterDescribe">灾情描述:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="disasterDescribe" id="disasterDescribe" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">事件图片：</label>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block" id="event-img"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div class="layui-row" style="padding: 60px">
+        <div class="layui-col-md5 layui-col-md-offset1">
+            <div id="export-list"></div>
+        </div>
+        <div class="layui-col-md5 layui-col-md-offset1">
+            <form class="layui-form" action="" onsubmit="return false" lay-filter="result">
+                <div class="layui-form-item">
+                    <label class="layui-form-label" for="result">会商结果:</label>
+                    <div class="layui-input-block">
+                        <textarea type="text" name="result" id="result" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit-btn-text">提交会商结果</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table id="detail-table"></table>
+</div>
+</body>
+<script type="text/html" id="submit-btn">
+    <div class="layui-form-item" id="submit-box">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit-btn-text">添加</button>
+        </div>
+    </div>
+</script>
+
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl', 'layer', 'profession', 'transfer', 'table'], function () {
+        let form = layui.form
+        let profession = layui.profession
+        let transfer = layui.transfer
+        let table = layui.table
+        let events = layui.events
+        let $ = layui.$
+
+        // todo 渲染数据，根据父页面的id与操作进行确定
+        let dataInfo = parent.rowData
+
+        let detailTable = table.render({
+            elem: '#detail-table'
+            ,url: '/event/getGoverningDetail'//数据接口
+            ,cols: [[ //表头
+                {field: 'createDate', title: '日期', align: 'center'}
+                ,{field: 'exportList', title: '会商人员', align: 'center'}
+                ,{field: 'result', title: '会商结果', align: 'center'}
+            ]]
+            ,where: {
+                eventId: dataInfo.id
+            }
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.governingList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+
+        if (dataInfo.operator !== 'add') {
+            // 渲染表格数据
+            form.val('eventDetail', {
+                'name': dataInfo.name,
+                'areaName': dataInfo.area.name,
+                'influenceArea': dataInfo.influenceArea,
+                'createDate': dataInfo.createDate,
+                'disasterDescribe': dataInfo.disasterDescribe
+            })
+            // 渲染图片
+            $('#event-img').html("<img style='object-fit:cover' src = '/"+dataInfo.pictureUrl+"' height='100px;' />")
+            $('.layui-input').attr('disabled', 'disabled')
+
+        }
+
+        // 渲染穿梭框中的专家数据
+        profession.getExportList(function (res) {
+            let data =  res.data.exportList
+            transfer.render({
+                elem: '#export-list'
+                ,title: ['专家列表', '会商成员']
+                ,width: 120
+                ,data: data
+                ,parseData: function(res){
+                    return {
+                        "value": res.id //数据值
+                        ,"title": res.name //数据标题
+                        ,"disabled": res.disabled  //是否禁用
+                        ,"checked": res.checked //是否选中
+                    }
+                 }
+                ,id: 'exports'
+            })
+        })
+
+
+        if (dataInfo.operator === 'edit' || dataInfo.operator === 'add') {
+            // 添加修改按钮
+            $('#submit-view').html($('#submit-btn').html())
+            if (dataInfo.operator === 'edit') {
+                $('#submit-btn-text').text('编辑')
+            } else {
+                $('#submit-btn-text').text('添加')
+            }
+        } else if (dataInfo.operator === 'detail') {
+
+        }
+
+        // 表单提交
+        form.on('submit(formDemo)', function (data) {
+            let formData = data.field
+            formData.eventId = dataInfo.id
+            // 处理专家列表，将名字进行拼接
+            formData.exports = ''
+            let exports = transfer.getData('exports')
+            for (let i = 0; i < exports.length; i++) {
+                formData.exports += exports[i].title + (i === (exports.length - 1) ? '' : ',')
+            }
+            console.log(formData)
+            if (formData.exports.length === 0) {
+                layer.msg('请在左侧添加会商成员！')
+            } else {
+                events.addGoverningDetail(formData, function (res) {
+                    if (res.code === 200) {
+                        detailTable.reload()
+                    }
+                })
+            }
+
+            return false
+        })
+
+    })
+</script>
+</html>

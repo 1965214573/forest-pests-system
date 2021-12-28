@@ -1,6 +1,7 @@
 package com.example.servlet;
 
 import com.example.entities.PO.EventPO;
+import com.example.entities.PO.GoverningDetail;
 import com.example.entities.Query.QueryEvent;
 import com.example.entities.VO.EventVO;
 import com.example.service.EventService;
@@ -126,5 +127,22 @@ public class EventServlet extends BaseServlet{
         String idStr = request.getParameter("id");
         EventService eventService = new EventServiceImpl();
         return eventService.governingEvent(Long.parseLong(idStr));
+    }
+
+    public ResultInfo addGoverningDetail(HttpServletRequest request, HttpServletResponse response) {
+        String eventId = request.getParameter("eventId");
+        String exports = request.getParameter("exports");
+        String result = request.getParameter("result");
+        long id = SnowIdUtils.uniqueLong();
+        GoverningDetail governingDetail = new GoverningDetail(id, Long.parseLong(eventId), exports, result, LocalDate.now());
+        EventService eventService = new EventServiceImpl();
+        return eventService.addGoverningResult(governingDetail);
+
+    }
+
+    public ResultInfo getGoverningDetail(HttpServletRequest request, HttpServletResponse response) {
+        String eventId = request.getParameter("eventId");
+        EventService eventService = new EventServiceImpl();
+        return eventService.getGoverningListByEventId(Long.parseLong(eventId));
     }
 }

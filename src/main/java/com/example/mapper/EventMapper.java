@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entities.PO.EventPO;
+import com.example.entities.PO.GoverningDetail;
 import com.example.entities.Query.QueryEvent;
 import com.example.entities.VO.EventSimpleVO;
 import com.example.entities.VO.EventVO;
@@ -67,4 +68,18 @@ public interface EventMapper {
      * @return 受影响的行数
      */
     int governingEvent(long eventId);
+
+    /**
+     * 添加事件对应会商记录
+     * @param governingDetail 会商记录对象
+     * @return 受影响行数
+     */
+    int insertGoverningResult(GoverningDetail governingDetail);
+
+    /**
+     * 根据事件id查询会商结果记录
+     * @param eventId 事件id
+     * @return 记录列表
+     */
+    List<GoverningDetail> queryGoverningDetailByEventId(long eventId);
 }

@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * @author youngoo
  */
-@WebFilter(filterName = "CharacterEncodeFilter", urlPatterns = {"/user.do/*", "/pest/*", "/disease/*", "/mouse/*", "/area/*", "/class/*", "/event/*", "/export/*"})
+@WebFilter(filterName = "CharacterEncodeFilter", urlPatterns = {"/user.do/*", "/pest/*", "/disease/*", "/mouse/*", "/area/*", "/class/*", "/event/*", "/export/*", "/store/*"})
 public class CharacterEncodeFilter implements Filter {
     Logger logger = Logger.getLogger(CharacterEncodeFilter.class);
     @Override

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>药剂器械页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name">药剂名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入专家名称" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="treatType">防治类型：</label>
+            <div class="layui-input-inline">
+                <select name="treatType" id="treatType" class="layui-select">
+                    <option value="1" selected>虫害</option>
+                    <option value="2">病害</option>
+                    <option value="3">鼠害</option>
+                </select>
+            </div>
+            <label class="layui-form-label" for="type">类别：</label>
+            <div class="layui-input-inline">
+                <select name="type" id="type" class="layui-select">
+                    <option value="1" selected>药剂</option>
+                    <option value="2">器械</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加药剂/器械</button>
+    </div>
+    <div class="layui-card">
+        <table class="box" id="deviceDrug-table" lay-filter="tables"></table>
+    </div>
+</div>
+</body>
+
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    var rowData = {}
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['table', 'form', 'layer', 'element', 'request'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let profession = layui.profession
+        let $ = layui.$
+
+        // 表格数据渲染
+        let deviceDrugTable = table.render({
+            elem: '#deviceDrug-table'
+            ,url: '/store/getDeviceDrugList'//数据接口
+            ,cols: [[ //表头
+                 {field: 'name', title: '姓名', align: 'center', width:200}
+                ,{field: 'treatType', title: '防治类型', align: 'center', templet: function (item) {
+                        if (item.treatType === 1) {
+                            return '虫害'
+                        } else if (item.treatType === 2) {
+                            return '病害'
+                        } else if (item.treatType === 3) {
+                            return '鼠害'
+                        }
+                    }}
+                ,{field: 'type', title: '类型', align: 'center', templet: function (item) {
+                        if (item.type === 1) {
+                            return '药剂'
+                        } else if (item.type === 2) {
+                            return '器械'
+                        }
+                    }}
+                ,{field: 'usage', title: '主要用途', align: 'center'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.deviceDrugList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            deviceDrugTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        // 添加药剂器械功能
+        $('#add').click(function () {
+            rowData.operator = 'add'
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加药剂/器械',
+                area: ['600px', '500px'],
+                content: './subPages/addDeviceDrug.html'
+            })
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>出库信息页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+</head>
+<body>
+<div class="layui-fluid" style="padding: 30px 60px">
+    <div class="layui-form layui-input-inline" lay-filter="addArea">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="className">领用小班：</label>
+            <div class="layui-input-block">
+                <input type="text" name="className" id="className" disabled autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="exerciser">出库人：</label>
+            <div class="layui-input-block">
+                <input type="text" name="exerciser" id="exerciser" disabled autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="createDate">出库日期：</label>
+            <div class="layui-input-block">
+                <input type="text" name="createDate" id="createDate" disabled autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl'], function () {
+        let store = layui.store
+        let form = layui.form
+
+        rowData = parent.data
+
+
+    })
+</script>
+</html>

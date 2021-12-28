@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加出库信息页面</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <span id="class-select"></span>
+            <label class="layui-form-label" for="exerciser">出库人：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="exerciser" id="exerciser" autocomplete="off" lay-verify="required" placeholder="请输入出库人" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="out">出库</button>
+            </div>
+        </div>
+    </form>
+    
+    <table id="device-drug-count" lay-filter="device-drug-table"></table>
+    <div id="device-drug-list"></div>
+</div>
+</body>
+
+<script type="text/html" id="select-html">
+    <label class="layui-form-label" for="classId">领用小班：</label>
+    <div class="layui-input-inline">
+        <select name="classId" id="classId">
+            {{# layui.each(d.classList, function (index, item) {}}
+            <option value="{{ item.id}}">{{ item.name}}</option>
+            {{# }) }}
+        </select>
+    </div>
+</script>
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">设置数量</a>
+</script>
+<script src="../../../layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '../../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['request', 'form', 'laytpl', 'transfer', 'table'], function () {
+        let store = layui.store
+        let form = layui.form
+        let clazz = layui.class
+        let laytpl = layui.laytpl
+        let transfer = layui.transfer
+        let table = layui.table
+        let $ = layui.$
+
+        let data
+        let acceptData = []
+
+        table.render({
+            elem: '#device-drug-count'
+            ,cols: [[ //表头
+                {field: 'name', title: '名称', align: 'center', width:200}
+                ,{field: 'treatType', title: '防治类型', align: 'center', templet: function (item) {
+                        if (item.treatType === 1) {
+                            return '虫害'
+                        } else if (item.treatType === 2) {
+                            return '病害'
+                        } else if (item.treatType === 3) {
+                            return '鼠害'
+                        }
+                    }}
+                ,{field: 'type', title: '类型', align: 'center', templet: function (item) {
+                        if (item.type === 1) {
+                            return '药剂'
+                        } else if (item.type === 2) {
+                            return '器械'
+                        }
+                    }}
+                ,{field: 'count', title: '数量', width: 100, align: 'center'}
+                ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
+            ]]
+            ,data: acceptData
+
+        })
+
+        // 获取小班信息，如果有，进行渲染
+        clazz.getClass(function (res) {
+            if (res.code === 200 && res.data.classList.length !== 0) {
+                laytpl($('#select-html').html()).render(res.data, function (html) {
+                    $('#class-select').html(html)
+                    form.render('select')
+                })
+            }
+        })
+
+        form.on('submit(out)', function (data) {
+
+
+            data.field.detail = table.cache['device-drug-count']
+            console.log(data.field)
+            store.addOutInfo(JSON.stringify(data.field), function (res) {
+                if (res.code === 200) {
+                    let index = parent.layer.getFrameIndex(window.name)
+                    parent.layer.close(index)
+                }
+                parent.layer.msg(res.msg)
+            })
+            return false;
+        })
+
+        // 渲染穿梭框
+        store.getDeviceDrugList(function (res) {
+            data =  res.data.deviceDrugList
+            transfer.render({
+                elem: '#device-drug-list'
+                ,title: ['药剂器械列表', '会商成员']
+                ,width: 120
+                ,data: data
+                ,parseData: function(res){
+                    return {
+                        "value": res.id //数据值
+                        ,"title": res.name //数据标题
+                        ,"disabled": res.disabled  //是否禁用
+                        ,"checked": res.checked //是否选中
+                    }
+                }
+                ,onchange: function (items, index) {
+                    if (index === 0) {
+                        // 加入表格
+                        for (let item of items) {
+                            let infoList = data.filter(i => {
+                                return i.id === item.value
+                            })
+                            let oldData = table.cache['device-drug-count']
+                            infoList[0].count = 0
+                            oldData.push(infoList[0])
+                            table.reload('device-drug-count', {data: oldData})
+                        }
+                    } else if (index=== 1) {
+                        // 移出表格
+                        let oldData = table.cache['device-drug-count']
+                        for (let item of items) {
+                            oldData = oldData.filter(i => {
+                                return i.id !== item.value
+                            })
+                        }
+                        table.reload('device-drug-count', {data: oldData})
+                    }
+                }
+                ,id: 'exports'
+            })
+        })
+
+        table.on('tool(device-drug-table)', function (obj) {
+            layer.prompt({
+                formType: 0,
+                value: '',
+                title: '请输入数量',
+                btn: ['确定','取消'], //按钮，
+                btnAlign: 'c'
+            }, function(value,index){
+                layer.close(index);
+                if(/^[1-9][0-9]*$/.test(value)) {
+                    obj.update({
+                        count:value
+                    })
+                } else {
+                    layer.msg("请输入正确的值！")
+                }
+            })
+
+        })
+    })
+</script>
+</html>

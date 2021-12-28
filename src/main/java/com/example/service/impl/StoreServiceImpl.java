@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
 import com.example.entities.PO.DeviceDrug;
+import com.example.entities.PO.Record;
+import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
 import com.example.mapper.StoreMapper;
 import com.example.service.StoreService;
@@ -61,6 +63,29 @@ public class StoreServiceImpl implements StoreService {
             if (storeMapper.insertDeviceDrug(deviceDrug) != 0) {
                 session.commit();
                 return ResultInfo.ok();
+            }
+        } catch (Exception e) {
+            logger.error("数据库操作异常", e);
+        }
+        return ResultInfo.err();
+    }
+
+    /**
+     * 添加出库信息到数据库
+     *
+     * @param record  出库记录
+     * @param details 对应记录详情
+     * @return 统一返回对象
+     */
+    @Override
+    public ResultInfo addOutletDetail(Record record, List<RecordDetail> details) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            StoreMapper storeMapper = session.getMapper(StoreMapper.class);
+            if (storeMapper.addRecord(record) != 0) {
+                if (storeMapper.batchSaveRecordDetail(details) != 0) {
+                    session.commit();
+                    return ResultInfo.ok();
+                }
             }
         } catch (Exception e) {
             logger.error("数据库操作异常", e);

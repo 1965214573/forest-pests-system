@@ -1,7 +1,10 @@
 package com.example.mapper;
 
 import com.example.entities.PO.DeviceDrug;
+import com.example.entities.PO.Record;
+import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +32,18 @@ public interface StoreMapper {
      * @return 受影响的行数
      */
     int insertDeviceDrug(DeviceDrug deviceDrug);
+
+    /**
+     * 添加一条出库管理简单记录
+     * @param record 记录对象
+     * @return 受影响的行数
+     */
+    int addRecord(Record record);
+
+    /**
+     * 批量插入出库记录详细信息
+     * @param details 出库记录列表
+     * @return 受影响的行数
+     */
+    int batchSaveRecordDetail(@Param("details") List<RecordDetail> details);
 }

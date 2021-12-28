@@ -2,7 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.mapper.StoreMapper">
     <insert id="insertDeviceDrug">
-        insert into storemanage_drug_device (id, name, treatType, type, `usage`) VALUES (#{id}, #{name}, #{treatType}, #{type}, #{usage})
+        insert into storemanage_drug_device (id, name, treatType, type, `usage`)
+        VALUES (#{id}, #{name}, #{treatType}, #{type}, #{usage})
+    </insert>
+    <insert id="addRecord">
+        insert into storemanage_record (id, createDate, smallClassId, exerciser)
+        VALUES (#{id}, #{createDate}, #{smallClassId}, #{exerciser})
+    </insert>
+    <insert id="batchSaveRecordDetail" parameterType="java.util.List">
+        insert into storemanage_record_detail (id, recordId, drugOrDeviceId, outletNumber) VALUES
+        <foreach collection="details" index="index" separator=",">
+            (#{details.id}, #{details.recordId}, #{details.drugOrDeviceId}, #{details.outletNumber})
+        </foreach>
     </insert>
     <select id="countDeviceDrug" resultType="java.lang.Integer">
         select count(*) from storemanage_drug_device

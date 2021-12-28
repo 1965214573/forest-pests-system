@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>出库管理页面</title>
+    <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css"/>
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline">
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="startDate">开始时间：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="startDate" id="startDate" autocomplete="off" placeholder="输入开始时间" class="layui-input">
+            </div>
+            <label class="layui-form-label" for="endDate">截止时间：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="endDate" id="endDate" autocomplete="off" placeholder="输入截止时间" class="layui-input">
+            </div>
+            <span id="class-select"></span>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="queryCondition">查询</button>
+            </div>
+        </div>
+    </form>
+    <div class="layui-form-item layui-input-inline">
+        <button class="layui-btn" id="add">添加出库信息</button>
+    </div>
+    <div class="layui-card">
+        <table class="box" id="deviceDrug-table" lay-filter="tables"></table>
+    </div>
+</div>
+</body>
+<script type="text/html" id="select-html">
+    <label class="layui-form-label" for="classId">领用小班：</label>
+    <div class="layui-input-inline">
+        <select name="classId" id="classId">
+            {{# layui.each(d.classList, function (index, item) {}}
+            <option value="{{ item.id}}">{{ item.name}}</option>
+            {{# }) }}
+        </select>
+    </div>
+</script>
+
+<!--工具条-->
+<script type="text/html" id="toolbar">
+    <a class="layui-btn layui-btn-xs" lay-event="detail">查看详情</a>
+</script>
+<script src="../../layuiadmin/layui/layui.js"></script>
+<script>
+    var rowData = {}
+    layui.config({
+        base: '../../api/'
+    }).extend({
+        request: 'util/request'
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl'], function () {
+        let form = layui.form
+        let layer = layui.layer
+        let table = layui.table
+        let clazz = layui.class
+        let laytpl = layui.laytpl
+        let profession = layui.profession
+        let $ = layui.$
+
+        // 获取小班信息，如果有，进行渲染
+        clazz.getClass(function (res) {
+            if (res.code === 200 && res.data.classList.length !== 0) {
+                laytpl($('#select-html').html()).render(res.data, function (html) {
+                    $('#class-select').html(html)
+                    form.render('select')
+                })
+            }
+        })
+
+        // 表格数据渲染
+        let deviceDrugTable = table.render({
+            elem: '#deviceDrug-table'
+            ,url: '/store/getDeviceDrugOutList'//数据接口
+            ,cols: [[ //表头
+                 {field: 'createDate', title: '日期', align: 'center', width:200}
+                ,{field: 'className', title: '领用小班', align: 'center'}
+                ,{field: 'exerciser', title: '出库人', align: 'center'}
+                ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
+            ]]
+            ,limit: 5
+            ,limits: [5, 10, 20]
+            ,page: true //开启分页
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.deviceDrugOutList,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(queryCondition)', function(data){
+            deviceDrugTable.reload({
+                where: data.field,
+                page: {
+                    curr: 1
+                }
+            })
+            return false;
+        });
+
+        // 添加出库信息功能
+        $('#add').click(function () {
+            rowData.operator = 'add'
+            // 打开一个新增页面
+            layer.open({
+                type: 2,
+                title: '添加出库信息',
+                area: ['1200px', '600px'],
+                content: './subPages/addDeviceDrugOut.html'
+            })
+        })
+
+        table.on('tool(tables)', function (obj) {
+            rowData = obj.data
+
+            layer.open({
+                type: 2,
+                title: '出库信息',
+                area: ['1000px', '600px'],
+                content: './subPages/deviceDrugOut.html'
+            })
+        })
+    })
+</script>
+</html>

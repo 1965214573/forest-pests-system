@@ -1,8 +1,12 @@
 package com.example.service;
 
 import com.example.entities.PO.DeviceDrug;
+import com.example.entities.PO.Record;
+import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
 import com.example.utils.ResultInfo;
+
+import java.util.List;
 
 /**
  * @author youngoo
@@ -21,4 +25,12 @@ public interface StoreService {
      * @return 统一返回对象
      */
     ResultInfo addDeviceDrug(DeviceDrug deviceDrug);
+
+    /**
+     * 添加出库信息到数据库
+     * @param record 出库记录
+     * @param details 对应记录详情
+     * @return 统一返回对象
+     */
+    ResultInfo addOutletDetail(Record record, List<RecordDetail> details);
 }

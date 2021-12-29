@@ -23,12 +23,12 @@
         <div id="view"></div>
       </div>
       <div class="layui-input-inline">
-        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="queryCondition">查询</button>
+        <button class="layui-btn" lay-submit lay-filter="queryCondition">查询</button>
       </div>
     </div>
   </form>
   <div class="layui-form-item layui-input-inline">
-    <button class="layui-btn layui-btn-normal" id="add">添加管理员</button>
+    <button class="layui-btn" id="add">添加管理员</button>
   </div>
   <div class="layui-card">
     <table class="box" id="pest-table" lay-filter="tables"></table>
@@ -46,7 +46,7 @@
 </script>
 
 <script id="role-select" type="text/html">
-  <select name="role" id="role">
+  <select name="roleId" id="role">
     {{# layui.each(d.roleList, function(index, item) { }}
       <option value="{{ item.roleId}}">{{ item.roleName}}</option>
     {{# }) }}
@@ -55,31 +55,33 @@
 
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
-  layui.use(['table', 'form', 'layer', 'laytpl', 'element'], function () {
+  var rowData
+  layui.config({
+    base: '../../../api/'
+  }).extend({
+    request: 'util/request'
+  }).use(['table', 'form', 'layer', 'laytpl', 'element', 'request'], function () {
     let form = layui.form
     let layer = layui.layer
     let table = layui.table
     let laytpl = layui.laytpl;
-    let element = layui.element
+    let user = layui.user
     let $ = layui.$
     let roleData
 
     // 加载下拉列表数据
-    $.ajax({
-      url: '/user.do/roleList',
-      type: 'get',
-      dataType: 'json',
-      success: function (res) {
+
+      user.getRoleList(function (res) {
         roleData = res.data
         laytpl($('#role-select').html()).render(roleData, function (html) {
           $('#view').html(html)
           form.render('select')
         })
-      }
-    })
+      })
+
 
     // 表格数据渲染
-    table.render({
+    let userTable = table.render({
       elem: '#pest-table'
       ,url: '/user.do/userList'//数据接口
       ,cols: [[ //表头
@@ -111,29 +113,41 @@
     table.on('tool(tables)', function (obj) {
       let data = obj.data
       let layEvent = obj.event
-      let tr = obj.tr
 
-      if (layEvent === 'edit') {
-        layer.msg("编辑数据")
-      }else if (layEvent === 'detail') {
-        layer.msg(JSON.stringify(data))
-      } else if (layEvent === 'del') {
-        layer.msg("删除数据")
+      if (layEvent === 'del') {
+        layer.confirm('真的删除行么', function(index){
+
+          // 发送删除指令
+          user.delUser({id: obj.data.userId}, function (res) {
+            if (res.code === 200) {
+              userTable.reload({
+                page: {
+                  curr: 1
+                }
+              })
+            }
+            layer.msg(res.msg)
+          })
+        });
+      } else {
+        rowData = data
+        rowData.operator = layEvent
+        layer.open({
+          type: 2,
+          title: (layEvent === 'edit' ? '编辑' : '查看') +'用户信息',
+          area: ['500px', '500px'],
+          content: './childPage/userDetail.html'
+        })
       }
 
     })
 
-    //监听条件查询提交提交
+    //监听条件查询提交
     form.on('submit(queryCondition)', function(data){
-      layer.msg(JSON.stringify(data.field))
-      $.ajax({
-        url: '/user.do/userList',
-        data: data.field,
-        type: 'get',
-        dataType: 'json',
-        success: function (res) {
-          // 获取数据，进行表格重新渲染
-
+      userTable.reload({
+        where: data.field,
+        page: {
+          curr: 1
         }
       })
       return false;
@@ -147,7 +161,6 @@
         title: '添加管理员',
         type: 2,
         area: ['500px', '500px'],
-        offset: '10px',
         content: 'childPage/addUser.html'
       })
     })

@@ -4,6 +4,12 @@
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId">
         insert into system_user values (default, #{userName}, #{userPwd}, #{realName}, default)
     </insert>
+    <update id="updateUser">
+        update system_user set userName = #{userName}, userPwd = #{userPwd}, realName = #{realName} where userId = #{userId}
+    </update>
+    <update id="delUserById">
+        update  system_user set isDeleted = 1 where userId = #{userId}
+    </update>
     <select id="queryByNameAndPwd" resultType="com.example.entities.VO.UserVO">
         SELECT
             system_user.userId,
@@ -57,5 +63,50 @@
         WHERE
             system_user.isDeleted = 0
         limit #{index},#{size}
+    </select>
+    <select id="queryAllUser" resultType="com.example.entities.VO.UserVO">
+        SELECT
+            system_user.userId,
+            system_user.userName,
+            system_user.userPwd,
+            system_role.roleName,
+            system_user.realName
+        FROM
+            system_user
+                INNER JOIN
+            system_user_role
+            ON
+                system_user.userId = system_user_role.userId
+                INNER JOIN
+            system_role
+            ON
+                system_user_role.roleId = system_role.roleId
+        WHERE
+            system_user.isDeleted = 0
+            <if test="roleId != null">
+                and system_role.roleId = #{roleId}
+            </if>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countUserAll" resultType="java.lang.Integer">
+        SELECT
+       count(*)
+        FROM
+        system_user
+        INNER JOIN
+        system_user_role
+        ON
+        system_user.userId = system_user_role.userId
+        LEFT JOIN
+        system_role
+        ON
+        system_user_role.roleId = system_role.roleId
+        WHERE
+        system_user.isDeleted = 0
+        <if test="roleId != null">
+            and system_role.roleId = #{roleId}
+        </if>
     </select>
 </mapper>

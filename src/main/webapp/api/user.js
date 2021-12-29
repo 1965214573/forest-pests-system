@@ -1,23 +1,46 @@
 layui.define(['service'], function (exports) {
     let service = layui.service
     let obj = {
-        getMenu: function (data, fun) {
+        getMenu: function (data, func) {
             service({
                 url: '/menu.do',
                 type: 'get',
                 data: data,
                 dataType: 'json',
-                success: fun
+                success: func
             })
         },
 
-        test: function (fun) {
+        updateUser: function (data, func) {
             service({
-                url: '/menu.do',
-                type: 'get',
+                url: '/user.do/updateUser',
                 data: data,
-                dataType: 'json',
-                success: fun
+                type: 'post',
+                success: func
+            })
+        },
+
+        getRoleList: function (func) {
+            service({
+                url: '/user.do/roleList',
+                success: func
+            })
+        },
+        delUser: function (data, func) {
+            service({
+                url: '/user.do/delUser',
+                type: 'post',
+                data: data,
+                success: func
+            })
+        },
+        addUser: function (data, func) {
+            service({
+                url: '/user.do/addUser',
+                type: 'post',
+                data: data,
+                success: func
+
             })
         }
     }

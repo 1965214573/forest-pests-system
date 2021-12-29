@@ -22,4 +22,12 @@ public interface RoleMapper {
      * @return 受影响的行数
      */
     int insertUser(@Param("userId") int userId, @Param("roleId") int roleId);
+
+    /**
+     * 修改用户对应的角色信息
+     * @param userId 用户id
+     * @param roleId 角色id
+     * @return 受影响的行数
+     */
+    int updateUserRole(@Param("userId") Integer userId, @Param("roleId") int roleId);
 }

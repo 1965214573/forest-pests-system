@@ -4,6 +4,9 @@
     <insert id="insertUser">
         insert into system_user_role values (default, #{userId}, #{roleId})
     </insert>
+    <update id="updateUserRole">
+        update system_user_role set roleId = #{roleId} where userId = #{userId}
+    </update>
     <select id="selectAll" resultType="com.example.entities.PO.Role">
         select * from system_role
     </select>

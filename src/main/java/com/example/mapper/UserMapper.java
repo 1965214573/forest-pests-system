@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entities.PO.User;
+import com.example.entities.Query.QueryUser;
 import com.example.entities.VO.UserVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,4 +40,32 @@ public interface UserMapper {
      * @return 插入的id
      */
     int insertUser(User userInfo);
+
+    /**
+     * 条件查询所有用户信息
+     * @param queryUser 查询条件
+     * @return 用户列表
+     */
+    List<UserVO> queryAllUser(QueryUser queryUser);
+
+    /**
+     * 条件统计用户数量
+     * @param queryUser 查询条件
+     * @return 用户数量
+     */
+    int countUserAll(QueryUser queryUser);
+
+    /**
+     * 更新用户信息
+     * @param user 用户对象
+     * @return 受影响的行数
+     */
+    int updateUser(User user);
+
+    /**
+     * 根据用户id删除该记录
+     * @param userId 用户id
+     * @return 受影响的行数
+     */
+    int delUserById(int userId);
 }

@@ -1,7 +1,10 @@
 package com.example.service;
 
 import com.example.entities.PO.User;
+import com.example.entities.Query.QueryUser;
 import com.example.utils.ResultInfo;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author youngoo
@@ -12,9 +15,10 @@ public interface UserService {
     /**
      * 数据库密码没有进行加密的登录请求方法
      * @param user 用户对象
+     * @param request 请求对象
      * @return 登录结果信息
      */
-    public ResultInfo unSafeLogin(User user);
+    public ResultInfo unSafeLogin(User user, HttpServletRequest request);
 
     /**
      * 查询所有角色信息
@@ -37,4 +41,26 @@ public interface UserService {
      * @return 统一返回格式
      */
     ResultInfo addUser(User userInfo, int roleId);
+
+    /**
+     * 条件查询用户信息
+     * @param queryUser 查询条件
+     * @return 统一返回对象
+     */
+    ResultInfo getUserList(QueryUser queryUser);
+
+    /**
+     * 修改用户信息
+     * @param user 用户对象
+     * @param roleId 角色id
+     * @return 统一返回对象
+     */
+    ResultInfo updateUser(User user, int roleId);
+
+    /**
+     * 删除用户
+     * @param userId 用户id
+     * @return 统一返回对象
+     */
+    ResultInfo delUser(int userId);
 }

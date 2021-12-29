@@ -4,6 +4,9 @@ import com.example.entities.PO.DeviceDrug;
 import com.example.entities.PO.Record;
 import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
+import com.example.entities.Query.QueryOut;
+import com.example.entities.VO.RecordDetailVO;
+import com.example.entities.VO.RecordVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -46,4 +49,25 @@ public interface StoreMapper {
      * @return 受影响的行数
      */
     int batchSaveRecordDetail(@Param("details") List<RecordDetail> details);
+
+    /**
+     * 条件查询所有的出库信息
+     * @param queryOut 查询条件
+     * @return 出库信息列表
+     */
+    List<RecordVO> selectOutList(QueryOut queryOut);
+
+    /**
+     * 条件统计出库信息数量
+     * @param queryOut 查询条件
+     * @return 数量
+     */
+    int countOut(QueryOut queryOut);
+
+    /**
+     * 根据出库记录id查询出库记录详情
+     * @param recordId 出库记录id
+     * @return 出库详情列表
+     */
+    List<RecordDetailVO> selectOutDetailByRecordId(long recordId);
 }

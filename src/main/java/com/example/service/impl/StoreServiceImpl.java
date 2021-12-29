@@ -4,6 +4,9 @@ import com.example.entities.PO.DeviceDrug;
 import com.example.entities.PO.Record;
 import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
+import com.example.entities.Query.QueryOut;
+import com.example.entities.VO.RecordDetailVO;
+import com.example.entities.VO.RecordVO;
 import com.example.mapper.StoreMapper;
 import com.example.service.StoreService;
 import com.example.utils.MybatisUtil;
@@ -87,6 +90,58 @@ public class StoreServiceImpl implements StoreService {
                     return ResultInfo.ok();
                 }
             }
+        } catch (Exception e) {
+            logger.error("数据库操作异常", e);
+        }
+        return ResultInfo.err();
+    }
+
+    /**
+     * 条件查询出库信息
+     *
+     * @param queryOut 查询条件
+     * @return 统一返回对象
+     */
+    @Override
+    public ResultInfo queryOut(QueryOut queryOut) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            StoreMapper storeMapper = session.getMapper(StoreMapper.class);
+            int count = storeMapper.countOut(queryOut);
+            Map<String, Object> data = new HashMap<>(2);
+            data.put("count", count);
+            if (count != 0) {
+                List<RecordVO> recordList = storeMapper.selectOutList(queryOut);
+                data.put("deviceDrugOutList", recordList);
+            }
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("出库信息")
+                    .data(data)
+                    .build();
+        } catch (Exception e) {
+            logger.error("数据库操作异常", e);
+        }
+        return ResultInfo.err();
+    }
+
+    /**
+     * 查询出库记录的详情
+     *
+     * @param recordId 出库记录id
+     * @return 统一返回对象
+     */
+    @Override
+    public ResultInfo queryOutDetail(long recordId) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            StoreMapper storeMapper = session.getMapper(StoreMapper.class);
+            List<RecordDetailVO> recordDetails = storeMapper.selectOutDetailByRecordId(recordId);
+            Map<String, Object> data = new HashMap<>(1);
+            data.put("recordDetail", recordDetails);
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("出库详情")
+                    .data(data)
+                    .build();
         } catch (Exception e) {
             logger.error("数据库操作异常", e);
         }

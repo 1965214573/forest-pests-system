@@ -4,6 +4,7 @@ import com.example.entities.PO.DeviceDrug;
 import com.example.entities.PO.Record;
 import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
+import com.example.entities.Query.QueryOut;
 import com.example.utils.ResultInfo;
 
 import java.util.List;
@@ -33,4 +34,18 @@ public interface StoreService {
      * @return 统一返回对象
      */
     ResultInfo addOutletDetail(Record record, List<RecordDetail> details);
+
+    /**
+     * 条件查询出库信息
+     * @param queryOut 查询条件
+     * @return 统一返回对象
+     */
+    ResultInfo queryOut(QueryOut queryOut);
+
+    /**
+     * 查询出库记录的详情
+     * @param recordId 出库记录id
+     * @return 统一返回对象
+     */
+    ResultInfo queryOutDetail(long recordId);
 }

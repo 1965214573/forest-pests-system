@@ -2,42 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>出库信息页面</title>
+    <title>出库信息详情页面</title>
     <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css">
+    <style>
+        .box {
+            margin-top: 20px;
+            margin-left: 10px;
+            background-color: white;
+            padding-top: 40px;
+        }
+    </style>
 </head>
 <body>
-<div class="layui-fluid" style="padding: 30px 60px">
-    <div class="layui-form layui-input-inline" lay-filter="addArea">
+<div class="box layui-row" >
+    <form class="layui-form layui-input-inline" lay-filter="record">
         <div class="layui-form-item">
             <label class="layui-form-label" for="className">领用小班：</label>
-            <div class="layui-input-block">
-                <input type="text" name="className" id="className" disabled autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <input type="text" name="className" id="className" autocomplete="off" lay-verify="required" placeholder="请输入出库人" class="layui-input">
             </div>
             <label class="layui-form-label" for="exerciser">出库人：</label>
-            <div class="layui-input-block">
-                <input type="text" name="exerciser" id="exerciser" disabled autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <input type="text" name="exerciser" id="exerciser" autocomplete="off" lay-verify="required" placeholder="请输入出库人" class="layui-input">
             </div>
             <label class="layui-form-label" for="createDate">出库日期：</label>
-            <div class="layui-input-block">
-                <input type="text" name="createDate" id="createDate" disabled autocomplete="off" class="layui-input">
+            <div class="layui-input-inline">
+                <input type="text" name="createDate" id="createDate" autocomplete="off" lay-verify="required" placeholder="请输入出库人" class="layui-input">
             </div>
         </div>
+    </form>
 
-    </div>
+    <table id="device-drug-count" lay-filter="device-drug-table"></table>
 </div>
 </body>
+
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
     layui.config({
         base: '../../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['request', 'form', 'laytpl'], function () {
+    }).use(['request', 'form', 'laytpl', 'transfer', 'table'], function () {
         let store = layui.store
         let form = layui.form
+        let clazz = layui.class
+        let laytpl = layui.laytpl
+        let transfer = layui.transfer
+        let table = layui.table
+        let $ = layui.$
 
-        rowData = parent.data
+        let dataInfo = parent.rowData
 
+        form.val('record', {
+            'className': dataInfo.className,
+            'exerciser': dataInfo.exerciser,
+            'createDate': dataInfo.createDate
+        })
+
+        $('.layui-input').attr('disabled', 'disabled')
+        table.render({
+            elem: '#device-drug-count'
+            ,url: '/store/getOutDetailList'
+            ,cols: [[ //表头
+                {field: 'name', title: '名称', align: 'center', width:200}
+                ,{field: 'treatType', title: '防治类型', align: 'center', templet: function (item) {
+                        if (item.treatType === 1) {
+                            return '虫害'
+                        } else if (item.treatType === 2) {
+                            return '病害'
+                        } else if (item.treatType === 3) {
+                            return '鼠害'
+                        }
+                    }}
+                ,{field: 'type', title: '类型', align: 'center', templet: function (item) {
+                        if (item.type === 1) {
+                            return '药剂'
+                        } else if (item.type === 2) {
+                            return '器械'
+                        }
+                    }}
+                ,{field: 'outletNumber', title: '领用数量', align: 'center'}
+            ]]
+            ,response: {
+                statusCode: 200
+            }
+            ,parseData: function (res) {
+                return {
+                    "code": res.code,
+                    "data": res.data.recordDetail,
+                    "count": res.data.count,
+                    "msg": res.msg
+                }
+            }
+            ,where: {
+                recordId: dataInfo.id
+            }
+
+        })
 
     })
 </script>

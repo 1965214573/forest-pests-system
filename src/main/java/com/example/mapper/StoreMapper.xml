@@ -46,4 +46,57 @@
             limit #{page}, #{limit}
         </if>
     </select>
+    <select id="selectOutList" resultType="com.example.entities.VO.RecordVO">
+        SELECT
+        storemanage_record.id,
+        storemanage_record.createDate,
+        storemanage_record.exerciser,
+        disaster_class.`name` AS className
+        FROM
+        storemanage_record
+        LEFT JOIN
+        disaster_class
+        ON
+        storemanage_record.smallClassId = disaster_class.id
+        <where>
+            <if test="startDate != null">
+                and createDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and createDate &lt;= #{endDate}
+            </if>
+            <if test="classId != null">
+                and smallClassId = #{classId}
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countOut" resultType="java.lang.Integer">
+        select count(*) from storemanage_record
+        <where>
+            <if test="startDate != null">
+                and createDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and createDate &lt;= #{endDate}
+            </if>
+            <if test="classId != null">
+                and smallClassId = #{classId}
+            </if>
+        </where>
+    </select>
+    <select id="selectOutDetailByRecordId" resultType="com.example.entities.VO.RecordDetailVO">
+        SELECT storemanage_drug_device.`name`,
+               storemanage_drug_device.treatType,
+               storemanage_drug_device.type,
+               storemanage_record_detail.outletNumber
+        FROM storemanage_record_detail
+                 LEFT JOIN
+             storemanage_drug_device
+             ON
+                 storemanage_record_detail.drugOrDeviceId = storemanage_drug_device.id
+        where recordId = #{recordId}
+    </select>
 </mapper>

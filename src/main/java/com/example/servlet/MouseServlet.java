@@ -8,6 +8,7 @@ import com.example.service.DiseaseService;
 import com.example.service.MouseService;
 import com.example.service.impl.DiseaseServiceImpl;
 import com.example.service.impl.MouseServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "mouseServlet", urlPatterns = "/mouse/*")
 public class MouseServlet extends BaseServlet{
+
+    @Action("查看鼠害列表")
     public ResultInfo getMouseList(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String page = request.getParameter("page");
@@ -34,6 +37,7 @@ public class MouseServlet extends BaseServlet{
         }
     }
 
+    @Action("添加鼠害信息")
     public ResultInfo addMouse(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String name = request.getParameter("name");
@@ -49,6 +53,7 @@ public class MouseServlet extends BaseServlet{
         return mouseService.addMouse(mouse);
     }
 
+    @Action("删除鼠害信息")
     public ResultInfo delMouse(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String idStr = request.getParameter("id");

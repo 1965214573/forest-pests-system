@@ -1,7 +1,9 @@
 package com.example.mapper;
 
+import com.example.entities.PO.Log;
 import com.example.entities.PO.Menu;
 import com.example.entities.PO.User;
+import com.example.entities.Query.QueryLog;
 import com.example.entities.VO.MenuVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -33,4 +35,18 @@ public interface CommonMapper {
      * @return 返回结果对象
      */
     List<MenuVO> getMenuList(User user);
+
+    /**
+     * 条件查询所有日志信息
+     * @param queryLog 查询条件
+     * @return 日记列表
+     */
+    List<Log> queryLog(QueryLog queryLog);
+
+    /**
+     * 条件统计日志记录数量
+     * @param queryLog 查询条件
+     * @return 记录数量
+     */
+    int countLog(QueryLog queryLog);
 }

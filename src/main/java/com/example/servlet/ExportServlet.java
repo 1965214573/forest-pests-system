@@ -6,6 +6,7 @@ import com.example.service.EventService;
 import com.example.service.ExportService;
 import com.example.service.impl.EventServiceImpl;
 import com.example.service.impl.ExportServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 @WebServlet(name = "exportServlet", urlPatterns = "/export/*")
 public class ExportServlet extends BaseServlet{
 
+    @Action("查看专家列表")
     public ResultInfo getExportList(HttpServletRequest request, HttpServletResponse response) {
         // 处理请求参数
         String name = request.getParameter("name");
@@ -34,6 +36,7 @@ public class ExportServlet extends BaseServlet{
         return exportService.queryAll(queryExport);
     }
 
+    @Action("添加专家信息")
     public ResultInfo addExport(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String name = request.getParameter("name");
@@ -52,6 +55,7 @@ public class ExportServlet extends BaseServlet{
         return exportService.addExport(export);
     }
 
+    @Action("修改专家信息")
     public ResultInfo updateExport(HttpServletRequest request, HttpServletResponse response) {
 
         // 处理参数
@@ -71,6 +75,7 @@ public class ExportServlet extends BaseServlet{
         return exportService.updateExport(export);
     }
 
+    @Action("删除专家信息")
     public ResultInfo deleteExport(HttpServletRequest request, HttpServletResponse response) {
         String idStr = request.getParameter("id");
         long id = Long.parseLong(idStr);
@@ -78,6 +83,7 @@ public class ExportServlet extends BaseServlet{
         return exportService.delExport(id);
     }
 
+    @Action("查看会商记录列表")
     public ResultInfo getGoverningList(HttpServletRequest request, HttpServletResponse response) {
         String page = request.getParameter("page");
         String limit = request.getParameter("limit");

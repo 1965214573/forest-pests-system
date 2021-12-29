@@ -6,6 +6,7 @@ import com.example.entities.Query.QueryEvent;
 import com.example.entities.VO.EventVO;
 import com.example.service.EventService;
 import com.example.service.impl.EventServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -24,6 +25,7 @@ import java.util.Map;
 @WebServlet(name = "eventServlet", urlPatterns = "/event/*")
 public class EventServlet extends BaseServlet{
 
+    @Action("添加事件")
     public ResultInfo addEvent(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String createDate = request.getParameter("createDate");
@@ -60,6 +62,7 @@ public class EventServlet extends BaseServlet{
         return eventService.addEvent(event);
     }
 
+    @Action("查看事件列表")
     public ResultInfo getEventList(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String disasterStage = request.getParameter("disasterStage");
@@ -81,12 +84,14 @@ public class EventServlet extends BaseServlet{
         return eventService.querySimpleList(queryEvent);
     }
 
+    @Action("查看事件")
     public ResultInfo getEventById(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
         EventService eventService = new EventServiceImpl();
         return eventService.getEventById(Long.parseLong(id));
     }
 
+    @Action("更新事件记录")
     public ResultInfo updateEvent(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String id = request.getParameter("id");
@@ -123,12 +128,14 @@ public class EventServlet extends BaseServlet{
         return eventService.updateEvent(eventPO);
     }
 
+    @Action("查看会商事件")
     public ResultInfo governingEvent(HttpServletRequest request, HttpServletResponse response) {
         String idStr = request.getParameter("id");
         EventService eventService = new EventServiceImpl();
         return eventService.governingEvent(Long.parseLong(idStr));
     }
 
+    @Action("添加会商详情")
     public ResultInfo addGoverningDetail(HttpServletRequest request, HttpServletResponse response) {
         String eventId = request.getParameter("eventId");
         String exports = request.getParameter("exports");
@@ -140,6 +147,7 @@ public class EventServlet extends BaseServlet{
 
     }
 
+    @Action("查看会商详情")
     public ResultInfo getGoverningDetail(HttpServletRequest request, HttpServletResponse response) {
         String eventId = request.getParameter("eventId");
         EventService eventService = new EventServiceImpl();

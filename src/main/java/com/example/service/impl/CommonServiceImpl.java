@@ -1,23 +1,28 @@
 package com.example.service.impl;
 
+import com.example.entities.PO.Log;
 import com.example.entities.PO.Menu;
 import com.example.entities.PO.User;
+import com.example.entities.Query.QueryLog;
 import com.example.entities.VO.MenuVO;
 import com.example.mapper.CommonMapper;
 import com.example.service.CommonService;
 import com.example.utils.MybatisUtil;
 import com.example.utils.ResultInfo;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author youngoo
  * @date 2021/12/9 20:42
  */
 public class CommonServiceImpl implements CommonService {
+    private final Logger logger = Logger.getLogger(this.getClass());
     /**
      * 根据角色id获取menu列表
      * 嵌套查询再进行封装整个内容
@@ -90,5 +95,33 @@ public class CommonServiceImpl implements CommonService {
                     .data(menuResult)
                     .build();
         }
+    }
+
+    /**
+     * 查询所有日志信息
+     *
+     * @param queryLog 条件对象
+     * @return 统一返回对象
+     */
+    @Override
+    public ResultInfo queryLog(QueryLog queryLog) {
+        try (SqlSession session = MybatisUtil.getSession()) {
+            CommonMapper commonMapper = session.getMapper(CommonMapper.class);
+            int count = commonMapper.countLog(queryLog);
+            Map<String, Object> data = new HashMap<>(2);
+            data.put("count", count);
+            if (count != 0) {
+                List<Log> logList = commonMapper.queryLog(queryLog);
+                data.put("logList", logList);
+            }
+            return ResultInfo.builder()
+                    .code(200)
+                    .msg("日志记录")
+                    .data(data)
+                    .build();
+        } catch (Exception e) {
+            logger.error("数据库操作失败", e);
+        }
+        return ResultInfo.err();
     }
 }

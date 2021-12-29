@@ -7,6 +7,7 @@ import com.example.service.DiseaseService;
 import com.example.service.PestService;
 import com.example.service.impl.DiseaseServiceImpl;
 import com.example.service.impl.PestServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "diseaseServlet", urlPatterns = "/disease/*")
 public class DiseaseServlet extends BaseServlet{
+    @Action("查看病害")
     public ResultInfo getDiseaseList(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String symptom = request.getParameter("symptom");
@@ -34,6 +36,7 @@ public class DiseaseServlet extends BaseServlet{
         }
     }
 
+    @Action("添加病害")
     public ResultInfo addDisease(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String name = request.getParameter("name");
@@ -49,6 +52,7 @@ public class DiseaseServlet extends BaseServlet{
         return diseaseService.addDisease(disease);
     }
 
+    @Action("删除病害")
     public ResultInfo delDisease(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String idStr = request.getParameter("id");

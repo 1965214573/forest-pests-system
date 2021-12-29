@@ -5,6 +5,7 @@ import com.example.entities.PO.Pest;
 import com.example.entities.Query.QueryPest;
 import com.example.service.PestService;
 import com.example.service.impl.PestServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "/pest/*")
 public class PestServlet extends BaseServlet{
 
+    @Action("查看虫害列表")
     public ResultInfo getPestList(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pestName = request.getParameter("pestName");
         String host = request.getParameter("host");
@@ -35,6 +37,7 @@ public class PestServlet extends BaseServlet{
         }
     }
 
+    @Action("添加虫害信息")
     public ResultInfo addPest(HttpServletRequest request, HttpServletResponse response) {
         String pestName = request.getParameter("pestName");
         String host = request.getParameter("host");
@@ -50,6 +53,7 @@ public class PestServlet extends BaseServlet{
         return pestService.addPest(pest);
     }
 
+    @Action("删除虫害信息")
     public ResultInfo delPest(HttpServletRequest request, HttpServletResponse response) {
         String idStr = request.getParameter("id");
         if (idStr != null) {

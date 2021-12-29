@@ -4,10 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.CommonMapper">
     <select id="getRootMenuList" resultType="com.example.entities.PO.Menu">
-        select system_menu.* from system_role_menu inner join system_menu on system_role_menu.menuId = system_menu.menuId where system_role_menu.roleId = #{roleId} and system_menu.pId = 0
+        select system_menu.*
+        from system_role_menu
+                 inner join system_menu on system_role_menu.menuId = system_menu.menuId
+        where system_role_menu.roleId = #{roleId}
+          and system_menu.pId = 0
     </select>
     <select id="getMenuListBypId" resultType="com.example.entities.PO.Menu">
-        SELECT * FROM system_menu WHERE pId = #{pId}
+        SELECT *
+        FROM system_menu
+        WHERE pId = #{pId}
     </select>
 
     <resultMap id="MenuVo" type="com.example.entities.VO.MenuVO">
@@ -23,33 +29,54 @@
         </collection>
     </resultMap>
     <select id="getMenuList" resultMap="MenuVo">
-        SELECT
-            f.menuId AS f_menuId,
-            f.menuName AS f_menuName,
-            f.menuUrl AS f_menuUrl,
-            f.icon AS f_icon,
-            c.menuId,
-            c.menuName,
-            c.menuUrl,
-            c.icon
-        FROM
-            system_user_role
-                INNER JOIN
-            system_role_menu
-            ON
-                system_user_role.roleId = system_role_menu.roleId
-                INNER JOIN
-            system_menu AS f
-            ON
-                system_role_menu.menuId = f.menuId
-                LEFT JOIN
-            system_menu AS c
-            ON
-                f.menuId = c.pId
-        WHERE
-            f.pId = 0 AND
-            system_user_role.userId = #{userId}
-        ORDER BY
-            c.menuId
+        SELECT f.menuId   AS f_menuId,
+               f.menuName AS f_menuName,
+               f.menuUrl  AS f_menuUrl,
+               f.icon     AS f_icon,
+               c.menuId,
+               c.menuName,
+               c.menuUrl,
+               c.icon
+        FROM system_user_role
+                 INNER JOIN
+             system_role_menu
+             ON
+                 system_user_role.roleId = system_role_menu.roleId
+                 INNER JOIN
+             system_menu AS f
+             ON
+                 system_role_menu.menuId = f.menuId
+                 LEFT JOIN
+             system_menu AS c
+             ON
+                 f.menuId = c.pId
+        WHERE f.pId = 0
+          AND system_user_role.userId = #{userId}
+        ORDER BY c.menuId
+    </select>
+    <select id="queryLog" resultType="com.example.entities.PO.Log">
+        select id, detail, executeDate from system_log
+        <where>
+            <if test="startDate != null and startDate != ''">
+                and executeDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and executeDate &lt;= #{endDate}
+            </if>
+        </where>
+        <if test="page != null">
+            limit #{page}, #{limit}
+        </if>
+    </select>
+    <select id="countLog" resultType="java.lang.Integer">
+        select count(*) from system_log
+        <where>
+            <if test="startDate != null and startDate != ''">
+                and executeDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and executeDate &lt;= #{endDate}
+            </if>
+        </where>
     </select>
 </mapper>

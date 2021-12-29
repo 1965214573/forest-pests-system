@@ -6,6 +6,7 @@ import com.example.entities.PO.DeviceDrug;
 import com.example.entities.PO.Record;
 import com.example.entities.PO.RecordDetail;
 import com.example.entities.Query.QueryDeviceDrug;
+import com.example.entities.Query.QueryOut;
 import com.example.service.StoreService;
 import com.example.service.impl.StoreServiceImpl;
 import com.example.utils.ResultInfo;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -73,7 +75,7 @@ public class StoreServlet extends BaseServlet{
         JSONArray list = new JSONArray();
         BufferedReader br;
         try {
-            br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
             String line = null;
             StringBuilder sb = new StringBuilder();
 
@@ -101,5 +103,30 @@ public class StoreServlet extends BaseServlet{
         System.out.println(record);
         details.forEach(System.out::println);
         return storeService.addOutletDetail(record, details);
+    }
+
+    public ResultInfo getDeviceDrugOutList(HttpServletRequest request, HttpServletResponse response) {
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String classId = request.getParameter("classId");
+        String page = request.getParameter("page");
+        String limit = request.getParameter("limit");
+
+        QueryOut queryOut = new QueryOut(
+                startDate == null ? null : LocalDate.parse(startDate),
+                endDate == null ? null : LocalDate.parse(endDate),
+                classId == null ? null : Long.parseLong(classId),
+                page == null ? null : (Integer.parseInt(page) - 1) * Integer.parseInt(limit),
+                limit == null ? null : Integer.parseInt(limit)
+        );
+        StoreService storeService = new StoreServiceImpl();
+        return storeService.queryOut(queryOut);
+
+    }
+
+    public ResultInfo getOutDetailList(HttpServletRequest request, HttpServletResponse response) {
+        String recordId = request.getParameter("recordId");
+        StoreService storeService = new StoreServiceImpl();
+        return storeService.queryOutDetail(Long.parseLong(recordId));
     }
 }

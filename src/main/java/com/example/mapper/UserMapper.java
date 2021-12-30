@@ -68,4 +68,11 @@ public interface UserMapper {
      * @return 受影响的行数
      */
     int delUserById(int userId);
+
+    /**
+     * 检查是否有相同的用户，只对用户名进行判别
+     * @param userInfo 用户信息
+     * @return 用户对象
+     */
+    UserVO queryByName(User userInfo);
 }

@@ -70,9 +70,8 @@
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
                         <hr>
-                        <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+                        <dd id="logout" style="text-align: center;"><a>退出</a></dd>
                     </dl>
                 </li>
 
@@ -191,8 +190,24 @@
             }
         })
 
+        $('#logout').click(function () {
+            $.ajax({
+                url: '/user.do/logOut',
+                type: 'post',
+                dataType: 'json',
+                headers: {
+                    token: JSON.parse(sessionStorage.getItem('token'))
+                },
+                success: function (res) {
+                    if (res.code === 200) {
+                        sessionStorage.removeItem("userInfo")
+                        sessionStorage.removeItem("token")
+                        location.reload()
+                    }
+                }
+            })
+        })
     });
-
 </script>
 </body>
 </html>

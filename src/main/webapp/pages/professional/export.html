@@ -23,11 +23,11 @@
             </div>
             <label class="layui-form-label" for="speciality">专长：</label>
             <div class="layui-input-inline">
-                <input type="text" name="speciality" id="speciality" autocomplete="off" placeholder="输入专家名称" class="layui-input">
+                <input type="text" name="speciality" id="speciality" autocomplete="off" placeholder="输入专长" class="layui-input">
             </div>
             <label class="layui-form-label" for="organization">工作单位：</label>
             <div class="layui-input-inline">
-                <input type="text" name="organization" id="organization" autocomplete="off" placeholder="输入专家名称" class="layui-input">
+                <input type="text" name="organization" id="organization" autocomplete="off" placeholder="输入工作单位" class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-submit lay-filter="queryCondition">查询</button>
@@ -69,7 +69,8 @@
             elem: '#export-table'
             ,url: '/export/getExportList'//数据接口
             ,cols: [[ //表头
-                 {field: 'name', title: '姓名', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'name', title: '姓名', align: 'center', width:200}
                 ,{field: 'organization', title: '工作单位', align: 'center'}
                 ,{field: 'speciality', title: '专长', align: 'center'}
                 ,{field: 'job', title: '职务', align: 'center'}

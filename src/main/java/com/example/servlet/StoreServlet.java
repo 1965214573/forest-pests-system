@@ -9,6 +9,7 @@ import com.example.entities.Query.QueryDeviceDrug;
 import com.example.entities.Query.QueryOut;
 import com.example.service.StoreService;
 import com.example.service.impl.StoreServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -32,6 +33,7 @@ import java.util.List;
 @WebServlet(name = "storeServlet", urlPatterns = "/store/*")
 public class StoreServlet extends BaseServlet{
 
+    @Action("查看药剂器械列表")
     public ResultInfo getDeviceDrugList(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String name = request.getParameter("name");
@@ -52,6 +54,7 @@ public class StoreServlet extends BaseServlet{
 
     }
 
+    @Action("添加药剂器械信息")
     public ResultInfo addDeviceDrug(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String name = request.getParameter("name");
@@ -70,6 +73,7 @@ public class StoreServlet extends BaseServlet{
         return storeService.addDeviceDrug(deviceDrug);
     }
 
+    @Action("添加出库信息")
     public ResultInfo addOutInfo(HttpServletRequest request, HttpServletResponse response) {
         JSONObject json = new JSONObject();
         JSONArray list = new JSONArray();
@@ -105,6 +109,7 @@ public class StoreServlet extends BaseServlet{
         return storeService.addOutletDetail(record, details);
     }
 
+    @Action("查看出库详细列表")
     public ResultInfo getDeviceDrugOutList(HttpServletRequest request, HttpServletResponse response) {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
@@ -113,8 +118,8 @@ public class StoreServlet extends BaseServlet{
         String limit = request.getParameter("limit");
 
         QueryOut queryOut = new QueryOut(
-                startDate == null ? null : LocalDate.parse(startDate),
-                endDate == null ? null : LocalDate.parse(endDate),
+                startDate == null || "".equals(startDate) ? null : LocalDate.parse(startDate),
+                endDate == null || "".equals(endDate) ? null : LocalDate.parse(endDate),
                 classId == null ? null : Long.parseLong(classId),
                 page == null ? null : (Integer.parseInt(page) - 1) * Integer.parseInt(limit),
                 limit == null ? null : Integer.parseInt(limit)
@@ -124,6 +129,7 @@ public class StoreServlet extends BaseServlet{
 
     }
 
+    @Action("查看出库信息")
     public ResultInfo getOutDetailList(HttpServletRequest request, HttpServletResponse response) {
         String recordId = request.getParameter("recordId");
         StoreService storeService = new StoreServiceImpl();

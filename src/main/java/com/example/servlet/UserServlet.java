@@ -118,4 +118,10 @@ public class UserServlet extends BaseServlet{
         CommonService commonService = new CommonServiceImpl();
         return commonService.queryLog(queryLog);
     }
+
+    @Action("退出登录")
+    public ResultInfo logOut(HttpServletRequest request, HttpServletResponse response) {
+        request.getSession().removeAttribute(request.getHeader("token"));
+        return ResultInfo.ok();
+    }
 }

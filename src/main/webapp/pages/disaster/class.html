@@ -19,7 +19,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label" for="className">小班名称：</label>
             <div class="layui-input-inline">
-                <input type="text" name="className" id="className" autocomplete="off" placeholder="输入区域名称" class="layui-input">
+                <input type="text" name="className" id="className" autocomplete="off" placeholder="输入小班名称" class="layui-input">
             </div>
             <span id="area-view"></span>
             <div class="layui-input-inline">
@@ -83,7 +83,7 @@
             elem: '#class-table'
             ,url: '/class/getClassList'//数据接口
             ,cols: [[ //表头
-                {field: 'id', title: 'id', hide: true}
+                {field: 'num', title: '序号', type: 'numbers'}
                 ,{field: 'name', title: '小班名称', align: 'center', width:200}
                 ,{field: 'principal', title: '负责人', align: 'center'}
                 ,{field: 'phone', title: '负责人电话', align: 'center'}

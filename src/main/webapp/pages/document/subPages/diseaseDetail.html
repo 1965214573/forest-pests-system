@@ -72,11 +72,6 @@
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
-    let data
-    function child(data) {
-        // 渲染数据
-        show(data)
-    }
     layui.config({
         base: '../../../api/'
     }).extend({
@@ -85,12 +80,13 @@
 
         let laytpl = layui.laytpl
         let $ = layui.$
+        let data = parent.rowData
 
-        window.show = function (data) {
-            laytpl($('#detail').html()).render(data, function (html) {
-                $('#view').html(html)
-            })
-        }
+
+        laytpl($('#detail').html()).render(data, function (html) {
+            $('#view').html(html)
+        })
+
     })
 </script>
 </html>

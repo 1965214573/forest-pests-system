@@ -48,6 +48,7 @@
 </script>
 <script src="../../layuiadmin/layui/layui.js"></script>
 <script>
+    var rowData
     layui.config({
         base: '../../api/'
     }).extend({
@@ -63,7 +64,7 @@
             elem: '#pest-table'
             ,url: '/pest/getPestList'//数据接口
             ,cols: [[ //表头
-                {field: 'id', title: 'id', hide: true}
+                {field: 'num', title: '序号', type: 'numbers'}
                 ,{field: 'pestName', title: '名称', align: 'center', width:200}
                 ,{field: 'hostName', title: '寄主', align: 'center',}
                 ,{field: 'damage', title: '主要危害', align: 'center',}
@@ -88,6 +89,7 @@
         // 工具栏事件监听
         table.on('tool(tables)', function (obj) {
             let layEvent = obj.event
+            rowData = obj.data
             if (layEvent === 'detail') {
                 // 查看详情
                 layer.open({
@@ -95,13 +97,7 @@
                     title: '虫害详情',
                     area: ['1000px', '610px'],
                     offset: '10px',
-                    content: './subPages/pestDetail.html',
-                    success: function (layero, index) {
-                        let iframe = window['layui-layer-iframe' + index]
-
-                        iframe.show(obj.data)
-
-                    }
+                    content: './subPages/pestDetail.html'
                 })
 
 
@@ -110,7 +106,6 @@
                 // 删除
                 layer.confirm('真的删除行么', function(index){
 
-                    console.log(obj.data)
                     layer.close(index)
                     // 发送删除指令
                     pest.delPest({id: obj.data.id}, function (res) {

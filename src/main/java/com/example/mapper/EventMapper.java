@@ -82,4 +82,11 @@ public interface EventMapper {
      * @return 记录列表
      */
     List<GoverningDetail> queryGoverningDetailByEventId(long eventId);
+
+    /**
+     * 更新专家建议
+     * @param governingDetail 专家会议详情
+     * @return 受影响的行数
+     */
+    int updateExportAdvice(GoverningDetail governingDetail);
 }

@@ -69,7 +69,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit-btn-text">提交会商结果</button>
+                        <button class="layui-btn" lay-submit lay-filter="formDemo">提交会商结果</button>
                     </div>
                 </div>
             </form>
@@ -78,13 +78,6 @@
     <table id="detail-table"></table>
 </div>
 </body>
-<script type="text/html" id="submit-btn">
-    <div class="layui-form-item" id="submit-box">
-        <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="formDemo" id="submit-btn-text">添加</button>
-        </div>
-    </div>
-</script>
 
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -107,7 +100,8 @@
             elem: '#detail-table'
             ,url: '/event/getGoverningDetail'//数据接口
             ,cols: [[ //表头
-                {field: 'createDate', title: '日期', align: 'center'}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'createDate', title: '日期', align: 'center'}
                 ,{field: 'exportList', title: '会商人员', align: 'center'}
                 ,{field: 'result', title: '会商结果', align: 'center'}
             ]]
@@ -126,22 +120,17 @@
                 }
             }
         });
-
-
-        if (dataInfo.operator !== 'add') {
-            // 渲染表格数据
-            form.val('eventDetail', {
-                'name': dataInfo.name,
-                'areaName': dataInfo.area.name,
-                'influenceArea': dataInfo.influenceArea,
-                'createDate': dataInfo.createDate,
-                'disasterDescribe': dataInfo.disasterDescribe
-            })
-            // 渲染图片
-            $('#event-img').html("<img style='object-fit:cover' src = '/"+dataInfo.pictureUrl+"' height='100px;' />")
-            $('.layui-input').attr('disabled', 'disabled')
-
-        }
+        // 渲染表格数据
+        form.val('eventDetail', {
+            'name': dataInfo.name,
+            'areaName': dataInfo.area.name,
+            'influenceArea': dataInfo.influenceArea,
+            'createDate': dataInfo.createDate,
+            'disasterDescribe': dataInfo.disasterDescribe
+        })
+        // 渲染图片
+        $('#event-img').html("<img style='object-fit:cover' src = '/"+dataInfo.pictureUrl+"' height='100px;' />")
+        $('.layui-input').attr('disabled', 'disabled')
 
         // 渲染穿梭框中的专家数据
         profession.getExportList(function (res) {
@@ -163,19 +152,6 @@
             })
         })
 
-
-        if (dataInfo.operator === 'edit' || dataInfo.operator === 'add') {
-            // 添加修改按钮
-            $('#submit-view').html($('#submit-btn').html())
-            if (dataInfo.operator === 'edit') {
-                $('#submit-btn-text').text('编辑')
-            } else {
-                $('#submit-btn-text').text('添加')
-            }
-        } else if (dataInfo.operator === 'detail') {
-
-        }
-
         // 表单提交
         form.on('submit(formDemo)', function (data) {
             let formData = data.field
@@ -186,7 +162,6 @@
             for (let i = 0; i < exports.length; i++) {
                 formData.exports += exports[i].title + (i === (exports.length - 1) ? '' : ',')
             }
-            console.log(formData)
             if (formData.exports.length === 0) {
                 layer.msg('请在左侧添加会商成员！')
             } else {

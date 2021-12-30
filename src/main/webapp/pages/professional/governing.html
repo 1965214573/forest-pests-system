@@ -53,7 +53,8 @@
             elem: '#export-table'
             ,url: '/export/getGoverningList'//数据接口
             ,cols: [[ //表头
-                {field: 'name', title: '姓名', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'name', title: '姓名', align: 'center', width:200}
                 ,{field: 'createDate', title: '日期', align: 'center'}
                 ,{field: 'areaName', title: '发生区域', align: 'center', templet: function (item) {
                         return item.area.name

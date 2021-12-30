@@ -109,4 +109,24 @@
             and system_role.roleId = #{roleId}
         </if>
     </select>
+    <select id="queryByName" resultType="com.example.entities.VO.UserVO">
+        SELECT
+            system_user.userId,
+            system_user.userName,
+            system_user.userPwd,
+            system_role.roleName AS `level`,
+            system_user.realName
+        FROM
+            system_user
+                INNER JOIN
+            system_user_role
+            ON
+                system_user.userId = system_user_role.userId
+                INNER JOIN
+            system_role
+            ON
+                system_user_role.roleId = system_role.roleId
+        WHERE
+            system_user.userName = #{userName}
+    </select>
 </mapper>

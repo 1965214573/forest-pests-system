@@ -60,15 +60,16 @@
         storemanage_record.smallClassId = disaster_class.id
         <where>
             <if test="startDate != null">
-                and createDate &gt;= #{startDate}
+                and storemanage_record.createDate &gt;= #{startDate}
             </if>
             <if test="endDate != null">
-                and createDate &lt;= #{endDate}
+                and storemanage_record.createDate &lt;= #{endDate}
             </if>
             <if test="classId != null">
                 and smallClassId = #{classId}
             </if>
         </where>
+        order by storemanage_record.createDate desc
         <if test="page != null">
             limit #{page}, #{limit}
         </if>

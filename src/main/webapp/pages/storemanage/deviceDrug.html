@@ -17,9 +17,9 @@
 <div class="box layui-row" >
     <form class="layui-form layui-input-inline">
         <div class="layui-form-item">
-            <label class="layui-form-label" for="name">药剂名称：</label>
+            <label class="layui-form-label" for="name">药剂/器械名称：</label>
             <div class="layui-input-inline">
-                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入专家名称" class="layui-input">
+                <input type="text" name="name" id="name" autocomplete="off" placeholder="输入药剂/器械名称" class="layui-input">
             </div>
             <label class="layui-form-label" for="treatType">防治类型：</label>
             <div class="layui-input-inline">
@@ -69,7 +69,8 @@
             elem: '#deviceDrug-table'
             ,url: '/store/getDeviceDrugList'//数据接口
             ,cols: [[ //表头
-                 {field: 'name', title: '名称', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'name', title: '名称', align: 'center', width:200}
                 ,{field: 'treatType', title: '防治类型', align: 'center', templet: function (item) {
                         if (item.treatType === 1) {
                             return '虫害'

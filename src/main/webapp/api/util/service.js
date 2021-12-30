@@ -1,6 +1,11 @@
 layui.define(['setting', 'jquery'], function (exports) {
     let setting = layui.setting
     let $ = layui.$
+    $.ajaxSetup({
+        headers: {
+            token: JSON.parse(sessionStorage.getItem('token'))
+        }
+    })
 
     $.ajaxPrefilter(function (options) {
         options.url = setting.baseURL + options.url

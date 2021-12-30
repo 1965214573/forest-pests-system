@@ -32,11 +32,11 @@
             <span id="area-select"></span>
             <label class="layui-form-label" for="startDate">起始日期：</label>
             <div class="layui-input-inline">
-                <input type="text" name="startDate" id="startDate" autocomplete="off" placeholder="输入林种" class="layui-input">
+                <input type="text" name="startDate" id="startDate" autocomplete="off" placeholder="输入起始时间" class="layui-input">
             </div>
             <label class="layui-form-label" for="endDate">结束日期：</label>
             <div class="layui-input-inline">
-                <input type="text" name="endDate" id="endDate" autocomplete="off" placeholder="输入林种" class="layui-input">
+                <input type="text" name="endDate" id="endDate" autocomplete="off" placeholder="输入截止时间" class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <button class="layui-btn" lay-submit lay-filter="queryCondition">搜索</button>
@@ -123,7 +123,8 @@
             elem: '#event-table'
             ,url: '/event/getEventList'//数据接口
             ,cols: [[ //表头
-                {field: 'name', title: '事件名称', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'name', title: '事件名称', align: 'center', width:200}
                 ,{field: 'createDate', title: '日期', align: 'center'}
                 ,{field: 'areaName', title: '发生区域', align: 'center'}
                 ,{field: 'measure', title: '防治方案', align: 'center'}

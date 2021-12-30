@@ -137,16 +137,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultInfo addUser(User userInfo, int roleId) {
         try(SqlSession session = MybatisUtil.getSession()) {
-            // 添加用户
+
+            // 查重
             UserMapper userMapper = session.getMapper(UserMapper.class);
-            if (userMapper.insertUser(userInfo) != 0) {
-                RoleMapper roleMapper = session.getMapper(RoleMapper.class);
-                if (roleMapper.insertUser(userInfo.getUserId(), roleId) != 0) {
-                    session.commit();
-                    return ResultInfo.ok();
+            UserVO userVO = userMapper.queryByName(userInfo);
+            if (userVO == null) {
+                // 添加用户
+                if (userMapper.insertUser(userInfo) != 0) {
+                    RoleMapper roleMapper = session.getMapper(RoleMapper.class);
+                    if (roleMapper.insertUser(userInfo.getUserId(), roleId) != 0) {
+                        session.commit();
+                        return ResultInfo.ok();
+                    }
                 }
             }
-
         } catch (Exception e) {
             logger.error("数据库操作失败", e);
         }

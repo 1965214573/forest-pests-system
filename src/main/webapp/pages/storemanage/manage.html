@@ -61,14 +61,26 @@
         base: '../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl'], function () {
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl', 'laydate'], function () {
         let form = layui.form
         let layer = layui.layer
         let table = layui.table
         let clazz = layui.class
         let laytpl = layui.laytpl
-        let profession = layui.profession
+        let laydate = layui.laydate
         let $ = layui.$
+
+        laydate.render({
+            elem: '#startDate',
+            type: 'date',
+            max: 0
+        })
+
+        laydate.render({
+            elem: '#endDate',
+            type: 'date',
+            max: 0
+        })
 
         // 获取小班信息，如果有，进行渲染
         clazz.getClass(function (res) {
@@ -85,7 +97,8 @@
             elem: '#deviceDrug-table'
             ,url: '/store/getDeviceDrugOutList'//数据接口
             ,cols: [[ //表头
-                 {field: 'createDate', title: '日期', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'createDate', title: '日期', align: 'center', width:200}
                 ,{field: 'className', title: '领用小班', align: 'center'}
                 ,{field: 'exerciser', title: '出库人', align: 'center'}
                 ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}

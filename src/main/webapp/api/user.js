@@ -40,7 +40,12 @@ layui.define(['service'], function (exports) {
                 type: 'post',
                 data: data,
                 success: func
-
+            })
+        },
+        logout: function (func) {
+            service({
+                url: '/user.do/logOut',
+                success: func
             })
         }
     }

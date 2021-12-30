@@ -52,7 +52,8 @@
             elem: '#deviceDrug-table'
             ,url: '/user.do/getLogList'//数据接口
             ,cols: [[ //表头
-                {field: 'executeDate', title: '操作时间', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'executeDate', title: '操作时间', align: 'center', width:200}
                 ,{field: 'detail', title: '事件详情', align: 'center'}
 
             ]]

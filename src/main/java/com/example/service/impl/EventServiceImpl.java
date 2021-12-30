@@ -177,10 +177,14 @@ public class EventServiceImpl implements EventService {
     public ResultInfo addGoverningResult(GoverningDetail governingDetail) {
         try (SqlSession session = MybatisUtil.getSession()) {
             EventMapper eventMapper = session.getMapper(EventMapper.class);
-            if (eventMapper.insertGoverningResult(governingDetail) != 0) {
-                session.commit();
-                return ResultInfo.ok();
+            // 更新专家建议
+            if (eventMapper.updateExportAdvice(governingDetail) != 0) {
+                if (eventMapper.insertGoverningResult(governingDetail) != 0) {
+                    session.commit();
+                    return ResultInfo.ok();
+                }
             }
+
         } catch (Exception e) {
             logger.error("数据库操作异常", e);
         }

@@ -165,7 +165,8 @@
             elem: '#detail-table'
             ,url: '/event/getGoverningDetail'//数据接口
             ,cols: [[ //表头
-                {field: 'createDate', title: '日期', align: 'center'}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'createDate', title: '日期', align: 'center'}
                 ,{field: 'exportList', title: '会商人员', align: 'center'}
                 ,{field: 'result', title: '会商结果', align: 'center'}
             ]]
@@ -244,6 +245,7 @@
                     }
                     form.render('select')
                 })
+                $('#exportAdvice').attr('disabled', 'disabled')
             })
 
             // 添加修改按钮

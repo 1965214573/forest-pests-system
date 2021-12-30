@@ -4,6 +4,7 @@ import com.example.entities.PO.Area;
 import com.example.entities.Query.QueryArea;
 import com.example.service.AreaService;
 import com.example.service.impl.AreaServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -23,6 +24,7 @@ public class AreaServlet extends BaseServlet{
         return areaService.queryLandTypeList();
     }
 
+    @Action("添加区域")
     public ResultInfo addArea(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String forestType = request.getParameter("forestType");
@@ -35,6 +37,7 @@ public class AreaServlet extends BaseServlet{
         return areaService.addArea(area);
     }
 
+    @Action("查看区域")
     public ResultInfo getAreaList(HttpServletRequest request, HttpServletResponse response) {
         // 处理查询条件
         String name = request.getParameter("name");
@@ -53,6 +56,7 @@ public class AreaServlet extends BaseServlet{
         return areaService.queryNoClassArea();
     }
 
+    @Action("查看区域操作")
     public ResultInfo getAllArea(HttpServletRequest request, HttpServletResponse response) {
         AreaService areaService = new AreaServiceImpl();
         return areaService.querySimpleArea();

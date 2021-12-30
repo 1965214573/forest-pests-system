@@ -67,7 +67,8 @@
         table.render({
             elem: '#device-drug-count'
             ,cols: [[ //表头
-                {field: 'name', title: '名称', align: 'center', width:200}
+                {field: 'num', title: '序号', type: 'numbers'}
+                ,{field: 'name', title: '名称', align: 'center', width:200}
                 ,{field: 'treatType', title: '防治类型', align: 'center', templet: function (item) {
                         if (item.treatType === 1) {
                             return '虫害'
@@ -140,7 +141,7 @@
                                 return i.id === item.value
                             })
                             let oldData = table.cache['device-drug-count']
-                            infoList[0].count = 0
+                            infoList[0].count = 5
                             oldData.push(infoList[0])
                             table.reload('device-drug-count', {data: oldData})
                         }

@@ -64,6 +64,7 @@
                 and executeDate &lt;= #{endDate}
             </if>
         </where>
+        order by executeDate desc
         <if test="page != null">
             limit #{page}, #{limit}
         </if>

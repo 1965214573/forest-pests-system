@@ -4,6 +4,7 @@ import com.example.entities.PO.Clazz;
 import com.example.entities.Query.QueryClass;
 import com.example.service.ClassService;
 import com.example.service.impl.ClassServiceImpl;
+import com.example.utils.Action;
 import com.example.utils.ResultInfo;
 import com.example.utils.SnowIdUtils;
 
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 @WebServlet(name = "classServlet", urlPatterns = "/class/*")
 public class ClassServlet extends BaseServlet{
 
+    @Action("添加小班")
     public ResultInfo addClass(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String principal = request.getParameter("principal");
@@ -32,6 +34,7 @@ public class ClassServlet extends BaseServlet{
         return classService.addClass(clazz, areaId);
     }
 
+    @Action("查看小班")
     public ResultInfo getClassList(HttpServletRequest request, HttpServletResponse response) {
         String className = request.getParameter("className");
         String areaId = request.getParameter("areaId");
@@ -42,11 +45,13 @@ public class ClassServlet extends BaseServlet{
         return classService.queryList(queryClass);
     }
 
+    @Action("查看小班")
     public ResultInfo getClass(HttpServletRequest request, HttpServletResponse response) {
         ClassService classService = new ClassServiceImpl();
         return classService.querySimpleList();
     }
 
+    @Action("修改小班")
     public ResultInfo updateClass(HttpServletRequest request, HttpServletResponse response) {
         // 处理参数
         String id = request.getParameter("id");

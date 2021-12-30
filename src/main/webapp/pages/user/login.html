@@ -86,7 +86,6 @@
     index: 'lib/index', //主入口模块
   }).use(['index', 'form'], function(){
     let form = layui.form
-    let user = layui.user
     let $ = layui.$;
 
     form.val('login-data', {
@@ -122,14 +121,11 @@
         }
       })
 
-
-
     })
     // 验证码重新加载
     $('#LAY-user-get-vercode').click(function () {
       $(this).attr('src', '/code?n=' + new Date().getTime())
     })
-    
   });
   </script>
 </body>

@@ -42,15 +42,11 @@
         base: '../../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['request', 'form', 'laytpl', 'transfer', 'table'], function () {
-        let store = layui.store
+    }).use(['request', 'form', 'table'], function () {
+
         let form = layui.form
-        let clazz = layui.class
-        let laytpl = layui.laytpl
-        let transfer = layui.transfer
         let table = layui.table
         let $ = layui.$
-
         let dataInfo = parent.rowData
 
         form.val('record', {
@@ -98,9 +94,7 @@
             ,where: {
                 recordId: dataInfo.id
             }
-
         })
-
     })
 </script>
 </html>

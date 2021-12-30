@@ -13,7 +13,6 @@ import com.example.utils.ResultInfo;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Calendar;
 
 /**
@@ -27,7 +26,7 @@ public class UserServlet extends BaseServlet{
     public ResultInfo login(HttpServletRequest request, HttpServletResponse response) {
         // 数据验证
 
-        String code = Calendar.getInstance().toString();
+        String code = "";
         code = (String) request.getSession().getAttribute("code");
         if (!code.equalsIgnoreCase(request.getParameter("vercode"))) {
             return ResultInfo.builder()

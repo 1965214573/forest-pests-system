@@ -74,9 +74,7 @@
             </div>
         </div>
     </div>
-
 </form>
-
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -86,12 +84,9 @@
         request: 'util/request'
     }).use(['request', 'setting', 'upload', 'form'], function () {
         let mouse = layui.mouse
-        let setting = layui.setting
         let upload = layui.upload
         let form = layui.form
         let $ = layui.$
-
-
 
         // 表单提交
         form.on('submit(formDemo)', function(data){
@@ -105,10 +100,8 @@
                     // 关闭页面
                     let index= parent.layer.getFrameIndex(Window.name);
                     parent.layer.close(index);
-
                 } else if (res.code === 400) {
                     layer.msg(res.msg)
-
                 }
             })
             return false
@@ -136,7 +129,6 @@
                     return '名称不能为空'
                 }
             }
-
         })
 
         upload.render({
@@ -149,7 +141,6 @@
                 let files = obj.pushFile();
                 //预读本地文件，如果是多文件，则会遍历。
                 obj.preview(function(index, file, result){
-                    console.log(index)
                     //图片插入到选择框中，
                     $("#mouse-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
                 });

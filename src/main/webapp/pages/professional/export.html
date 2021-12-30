@@ -124,8 +124,6 @@
             if (layEvent === 'del') {
                 // 弹出删除界面
                 layer.confirm('真的删除行么', function(index){
-
-                    console.log(obj.data)
                     layer.close(index)
                     // 发送删除指令
                     profession.delExport({id: obj.data.id}, function (res) {

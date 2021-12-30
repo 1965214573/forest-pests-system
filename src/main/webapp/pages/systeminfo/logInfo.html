@@ -43,9 +43,21 @@
         base: '../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl'], function () {
+    }).use(['table', 'form', 'layer', 'element', 'request', 'laytpl', 'laydate'], function () {
         let form = layui.form
         let table = layui.table
+        let laydate = layui.laydate
+
+        laydate.render({
+            elem: '#startDate',
+            type: 'datetime',
+            max: 1
+        })
+        laydate.render({
+            elem: '#endDate',
+            type: 'datetime',
+            max: 1
+        })
 
         // 表格数据渲染
         let deviceDrugTable = table.render({
@@ -57,8 +69,8 @@
                 ,{field: 'detail', title: '事件详情', align: 'center'}
 
             ]]
-            ,limit: 5
-            ,limits: [5, 10, 20]
+            ,limit: 10
+            ,limits: [10, 20, 30]
             ,page: true //开启分页
             ,response: {
                 statusCode: 200

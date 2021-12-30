@@ -19,6 +19,6 @@ public class Log {
     @JSONField(serializeUsing = ToStringSerializer.class)
     private Long id;
     private String detail;
-    @JSONField(format = "yyyy-MM-dd hh:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime executeDate;
 }

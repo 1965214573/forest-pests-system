@@ -87,9 +87,7 @@
             </div>
         </div>
     </div>
-
 </form>
-
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -104,8 +102,6 @@
         let form = layui.form
         let $ = layui.$
 
-
-
         // 表单提交
         form.on('submit(formDemo)', function(data){
             layer.msg(JSON.stringify(data.field));
@@ -118,10 +114,8 @@
                     // 关闭页面
                     let index= parent.layer.getFrameIndex(Window.name);
                     parent.layer.close(index);
-
                 } else if (res.code === 400) {
                     layer.msg(res.msg)
-
                 }
             })
             return false
@@ -143,16 +137,9 @@
                 if (value === '') {
                     return '内容不能为空'
                 }
-            },
-            enemy: function (value) {
-                if (value === '') {
-                    return '名称不能为空'
-                }
             }
-
         })
         console.log(setting.backgroundAddress)
-
 
         upload.render({
             elem: '#upload-child',
@@ -164,7 +151,6 @@
                 let files = obj.pushFile();
                 //预读本地文件，如果是多文件，则会遍历。
                 obj.preview(function(index, file, result){
-                    console.log(index)
                     //图片插入到选择框中，
                     $("#child-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
                 });

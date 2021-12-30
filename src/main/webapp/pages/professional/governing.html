@@ -41,12 +41,11 @@
         base: '../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['table', 'form', 'layer', 'element', 'request'], function () {
-        let form = layui.form
+    }).use(['table', 'layer', 'element', 'request'], function () {
+
         let layer = layui.layer
         let table = layui.table
         let profession = layui.profession
-        let $ = layui.$
 
         // 表格数据渲染
         let exportTable = table.render({
@@ -79,8 +78,6 @@
             }
         });
 
-
-
         table.on('tool(tables)', function (obj) {
             rowData = obj.data
             let layEvent = obj.event
@@ -89,8 +86,6 @@
             if (layEvent === 'del') {
                 // 弹出删除界面
                 layer.confirm('真的删除行么', function(index){
-
-                    console.log(obj.data)
                     layer.close(index)
                     // 发送删除指令
                     profession.delExport({id: obj.data.id}, function (res) {

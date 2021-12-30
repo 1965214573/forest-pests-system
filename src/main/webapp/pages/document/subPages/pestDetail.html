@@ -76,8 +76,6 @@
 
     </form>
 </script>
-
-
 </body>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -85,9 +83,8 @@
         base: '../../../api/'
     }).extend({
         request: 'util/request'
-    }).use(['form', 'laytpl', 'request'], function () {
+    }).use(['laytpl', 'request'], function () {
 
-        let form = layui.form
         let laytpl = layui.laytpl
         let $ = layui.$
         let data = parent.rowData

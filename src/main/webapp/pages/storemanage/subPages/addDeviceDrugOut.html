@@ -89,7 +89,6 @@
                 ,{field: 'option', title: '操作', align: 'center', width: 180, templet: '#toolbar'}
             ]]
             ,data: acceptData
-
         })
 
         // 获取小班信息，如果有，进行渲染
@@ -103,10 +102,7 @@
         })
 
         form.on('submit(out)', function (data) {
-
-
             data.field.detail = table.cache['device-drug-count']
-            console.log(data.field)
             store.addOutInfo(JSON.stringify(data.field), function (res) {
                 if (res.code === 200) {
                     let index = parent.layer.getFrameIndex(window.name)
@@ -177,7 +173,6 @@
                     layer.msg("请输入正确的值！")
                 }
             })
-
         })
     })
 </script>

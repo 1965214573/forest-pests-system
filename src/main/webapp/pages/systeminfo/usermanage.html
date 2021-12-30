@@ -79,7 +79,6 @@
         })
       })
 
-
     // 表格数据渲染
     let userTable = table.render({
       elem: '#pest-table'
@@ -115,7 +114,6 @@
 
       if (layEvent === 'del') {
         layer.confirm('真的删除行么', function(index){
-
           // 发送删除指令
           user.delUser({id: obj.data.userId}, function (res) {
             if (res.code === 200) {
@@ -138,7 +136,6 @@
           content: './childPage/userDetail.html'
         })
       }
-
     })
 
     //监听条件查询提交
@@ -152,8 +149,6 @@
       return false;
     });
 
-
-
     $('#add').click(function () {
       // 打开一个新增页面
       layer.open({
@@ -163,7 +158,6 @@
         content: 'childPage/addUser.html'
       })
     })
-
   })
 </script>
 </html>

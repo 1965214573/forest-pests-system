@@ -109,8 +109,6 @@
                 </div>
             </div>
         </form>
-
-
     </div>
     <table id="detail-table"></table>
 </div>
@@ -133,7 +131,6 @@
             </select>
         </div>
     </div>
-
 </script>
 <script src="../../../layuiadmin/layui/layui.js"></script>
 <script>
@@ -189,7 +186,6 @@
         events.getEventById({id: dataInfo.eventId}, function (res) {
             if (res.code === 200) {
                 let eventInfo = res.data.eventInfo
-                console.log(eventInfo)
                 // 对form表单进行渲染
                 form.val('eventDetail', {
                     'name': eventInfo.name,
@@ -221,10 +217,6 @@
                 $("#disease-img").html("<img style='object-fit:cover' src = '/" + eventInfo.pictureUrl + "' height='100px;' />")
             }
         })
-
-
-
-
         if (dataInfo.operator === 'edit') {
             // 渲染地类下拉列表
             area.getAllArea(function (res) {
@@ -232,7 +224,6 @@
                 if (res.code !== 200 || res.data.areaList.length === 0) {
                     let index = parent.layer.getFrameIndex(window.name)
                     parent.layer.close(index)
-
                     parent.layer.msg('暂无可管理的区域！请先添加区域信息')
                 }
                 laytpl($('#area-select').html()).render(res.data, function (html) {
@@ -297,7 +288,6 @@
                 let files = obj.pushFile();
                 //预读本地文件，如果是多文件，则会遍历。
                 obj.preview(function(index, file, result){
-                    console.log(index)
                     //图片插入到选择框中，
                     $("#disease-img").html("<img style='object-fit:cover' src = '"+result+"' height='100px;' />");
                 });
@@ -309,8 +299,6 @@
                 //请求异常回调
             }
         })
-
-
     })
 </script>
 </html>

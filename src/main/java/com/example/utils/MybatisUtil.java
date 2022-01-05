@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 
 /**
  * 简单的Mybatis工具类，用来获取会话对象（SqlSession）
@@ -19,6 +20,8 @@ public class MybatisUtil {
      * 根据配置文件创建的SqlSessionFactory
      */
     private static final SqlSessionFactory SQL_SESSION_FACTORY;
+
+    private static final ThreadLocal<SqlSession> THREAD_LOCAL = new ThreadLocal<>();
 
     static {
         // 初始化当前SqlSessionFactory
@@ -53,7 +56,19 @@ public class MybatisUtil {
      * @return sqlSession 返回创建好的会话对象
      */
     public static SqlSession getSession() {
-        return SQL_SESSION_FACTORY.openSession();
+        SqlSession session = THREAD_LOCAL.get();
+        if (session == null) {
+            session = SQL_SESSION_FACTORY.openSession();
+            THREAD_LOCAL.set(session);
+        }
+        return session;
+    }
+
+    public static void commitTransaction() {
+        SqlSession sqlSession = THREAD_LOCAL.get();
+        if (sqlSession != null) {
+            sqlSession.commit();
+        }
     }
 
     /**
@@ -63,5 +78,17 @@ public class MybatisUtil {
      */
     public static SqlSession getSession(boolean autoCommit) {
         return SQL_SESSION_FACTORY.openSession(autoCommit);
+    }
+
+    /**
+     * 关闭SqlSession连接资源
+     */
+    public static void closeSqlSession() {
+
+        SqlSession sqlSession = THREAD_LOCAL.get();
+        if (sqlSession != null) {
+            sqlSession.close();
+            THREAD_LOCAL.remove();
+        }
     }
 }

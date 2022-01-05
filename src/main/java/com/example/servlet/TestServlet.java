@@ -1,5 +1,8 @@
 package com.example.servlet;
 
+import com.example.service.TestService;
+import com.example.service.impl.TestServiceImpl;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -8,12 +11,12 @@ import java.io.IOException;
 /**
  * @author youngoo
  */
-@WebServlet(name = "TestServlet", value = "/test.do")
+@WebServlet(name = "TestServlet", value = "/test")
 public class TestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String role = request.getParameter("role");
-        System.out.println(role);
+        TestService testService = new TestServiceImpl();
+        testService.updateLog();
     }
 
     @Override
